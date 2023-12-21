@@ -48,8 +48,8 @@ function isUser(user: unknown): user is User {
   return (
     user != null &&
     typeof user === "object" &&
-    "email" in user &&
-    typeof user.email === "string"
+    "username" in user &&
+    typeof user.username === "string"
   );
 }
 
@@ -71,6 +71,9 @@ export function useUser(): User {
   return maybeUser;
 }
 
-export function validateEmail(email: unknown): email is string {
-  return typeof email === "string" && email.length > 3 && email.includes("@");
+// export function validateEmail(email: unknown): email is string {
+//   return typeof email === "string" && email.length > 3 && email.includes("@");
+
+export function validateUsername(email: unknown): email is string {
+  return typeof email === "string" && email.length > 3;
 }

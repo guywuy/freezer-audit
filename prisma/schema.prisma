@@ -8,14 +8,14 @@ generator client {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id       String @id @default(cuid())
+  username String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   password Password?
-  notes    Note[]
+  items    Item[]
 }
 
 model Password {
@@ -25,10 +25,13 @@ model Password {
   userId String @unique
 }
 
-model Note {
-  id    String @id @default(cuid())
-  title String
-  body  String
+model Item {
+  id        String   @id @default(cuid())
+  title     String
+  amount    String
+  location  String
+  category  String?
+  needsMore Boolean?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

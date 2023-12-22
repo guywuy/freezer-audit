@@ -34,12 +34,12 @@ export default function ItemsPage() {
   );
 
   return (
-    <div className="flex h-full min-h-screen flex-col">
-      <header className="flex items-center justify-between bg-slate-800 p-4 text-white">
+    <div className="flex h-full min-h-screen flex-col bg-gray-50">
+      <header className="flex items-center justify-between p-4 pl-2 text-white">
         <Form action="/logout" method="post">
           <button
             type="submit"
-            className="rounded bg-slate-600 px-4 py-2 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
+            className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
           >
             Logout
           </button>
@@ -47,22 +47,22 @@ export default function ItemsPage() {
 
         <Link
           to="new"
-          className="rounded bg-green-700 px-4 py-2 block p-4 text-xl text-white"
+          className="rounded text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-gradient-to-bl from-green-100 to-green-50"
         >
           + New Item
         </Link>
       </header>
 
-      <main className="flex flex-col h-full bg-white">
-        <div className="flex-1 basis-1/5 flex flex-col bg-gray-50 pt-4 overflow-auto">
+      <main className="flex flex-col h-full">
+        <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           {categoryKeys.length === 0 ? (
             <p className="p-4">No items yet</p>
           ) : (
-            <ol>
+            <ol className="mt-8">
               {usedCategoriesInOrder.map((category) => (
-                <li key={category.name} className="-mt-6">
+                <li key={category.name} className="-mt-6 bg-gradient-to-r from-white to-gray-50">
                   <header
-                    className={`pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-2 ${
+                    className={`pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
                       category.bgColourClass || "bg-teal-400"
                     } ${category.borderColourClass || "bg-teal-50"}`}
                   >
@@ -70,7 +70,7 @@ export default function ItemsPage() {
                     <p className="text-2xl">{category.emoji}</p>
                   </header>
                   <ol
-                    className={`mb-2 divide-y divide-fuchsia-200 border-l-2 last:pb-6 ${
+                    className={`mb-2 divide-y divide-fuchsia-200 border-l-4 last:pb-6 ${
                       category.borderColourClass || "border-teal-400"
                     }`}
                   >
@@ -110,7 +110,7 @@ export default function ItemsPage() {
         </div>
 
         <div
-          className={`max-h-screen fixed min-h-[60vh] h-auto bottom-0 left-0 w-full border-t-4 border-l-2 empty:hidden flex-1 p-6 rounded-tl-xl overflow-auto shadow-top bg-fuchsia-50 border-fuchsia-600 bg-noise`}
+          className={`max-h-screen fixed min-h-[60vh] h-auto bottom-0 left-0 w-full border-t-4 border-l-4 empty:hidden flex-1 p-6 rounded-tl-xl overflow-auto shadow-top bg-fuchsia-50 border-fuchsia-600 bg-noise`}
         >
           <Outlet />
         </div>

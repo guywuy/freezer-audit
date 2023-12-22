@@ -176,6 +176,6 @@ We use [Prettier](https://prettier.io/) for auto-formatting in this project. It'
 
 ### TODO
 
-- Enable item edit
+- Enable item edit - copy create template (or componentise form) and add in needsMore toggle
 - List page - separate grouping for needsMore. Filter out items first into other array
 - Make item delete confirmation

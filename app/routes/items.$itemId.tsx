@@ -2,6 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
+  Link,
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
@@ -42,11 +43,32 @@ export default function ItemDetailsPage() {
         <BackToIndex />
       </div>
       <hr className="my-4" />
-      <Form method="post">
-        <button type="submit" className="btn">
-          Delete
-        </button>
-      </Form>
+      <ul className="mb-4 grid grid-cols-2 gap-2 text-xs text-gray-800">
+        <li>
+          <span className="font-thin">Amount: </span>
+          {data.item.amount}
+        </li>
+        <li>
+          <span className="font-thin">Location: </span>
+          {data.item.location}
+        </li>
+        <li>
+          <span className="font-thin">Created at: </span>
+          {data.item.createdAt?.substring(0, 10)}
+        </li>
+        <li>
+          <span className="font-thin">Updated at: </span>
+          {data.item.updatedAt?.substring(0, 10)}
+        </li>
+      </ul>
+      <div className="flex justify-end gap-2 my-3">
+        <Link to={"edit"} className="btn">Edit</Link>
+        <Form method="post">
+          <button type="submit" className="btn !bg-red-800">
+            Delete
+          </button>
+        </Form>
+      </div>
     </div>
   );
 }

@@ -9,7 +9,16 @@ export function getItem({
   userId: User["id"];
 }) {
   return prisma.item.findFirst({
-    select: { id: true, title: true },
+    select: {
+      id: true,
+      title: true,
+      amount: true,
+      location: true,
+      category: true,
+      needsMore: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     where: { id, userId },
   });
 }

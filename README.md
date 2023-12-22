@@ -176,6 +176,5 @@ We use [Prettier](https://prettier.io/) for auto-formatting in this project. It'
 
 ### TODO
 
-- Style form or create components
-- Change layout
+- Enable item edit
 - List page - group by category with separate grouping for needsMore

@@ -1,10 +1,11 @@
+import { Item } from "@prisma/client";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import { getItemListItems } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
+import { categoryInfos } from "~/shared";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -14,7 +15,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function ItemsPage() {
   const data = useLoaderData<typeof loader>();
-  const user = useUser();
 
   const categoryList = data.itemListItems.reduce(
     (catOb, item) => {
@@ -25,20 +25,13 @@ export default function ItemsPage() {
       }
       return catOb;
     },
-    {} as Record<
-      string,
-      {
-        id: string;
-        title: string;
-        amount: string;
-        location: string;
-        category: string;
-        needsMore: boolean | null;
-      }[]
-    >,
+    {} as Record<string, Partial<Item>[]>,
   );
 
   const categoryKeys = Object.keys(categoryList);
+  const usedCategoriesInOrder = categoryInfos.filter(
+    (cat) => categoryList[cat.name],
+  );
 
   return (
     <div className="flex h-full min-h-screen flex-col">
@@ -61,35 +54,48 @@ export default function ItemsPage() {
       </header>
 
       <main className="flex flex-col h-full bg-white">
-        <div className="flex-1 basis-1/5 flex flex-col bg-gray-50 overflow-auto">
+        <div className="flex-1 basis-1/5 flex flex-col bg-gray-50 pt-4 overflow-auto">
           {categoryKeys.length === 0 ? (
             <p className="p-4">No items yet</p>
           ) : (
             <ol>
-              {categoryKeys.map((category) => (
-                <li key={category} className="border-t-4 border-teal-400 pb-4">
-                  <h3 className="text-lg px-2 py-4 bg-teal-50 uppercase">
-                    {category}
-                  </h3>
-                  <ol className="mb-2 divide-y divide-fuchsia-200">
-                    {categoryList[category].map((item) => (
+              {usedCategoriesInOrder.map((category) => (
+                <li key={category.name} className="-mt-6">
+                  <header
+                    className={`pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-2 ${
+                      category.bgColourClass || "bg-teal-400"
+                    } ${category.borderColourClass || "bg-teal-50"}`}
+                  >
+                    <h3 className="text-lg font-bold">{category.name}</h3>
+                    <p className="text-2xl">{category.emoji}</p>
+                  </header>
+                  <ol
+                    className={`mb-2 divide-y divide-fuchsia-200 border-l-2 last:pb-6 ${
+                      category.borderColourClass || "border-teal-400"
+                    }`}
+                  >
+                    {categoryList[category.name].map((item) => (
                       <li key={item.id}>
                         <NavLink
                           className={({ isActive }) =>
-                            `block p-2 py-3 text-lg ${
+                            `block p-2 py-3 text-xl bg-opacity-50 ${
                               isActive ? "bg-fuchsia-100" : ""
                             }`
                           }
-                          to={item.id}
+                          to={item.id!}
                         >
                           {item.title}
-                          <ul className="mt-1 grid grid-cols-2 gap-2 text-xs text-gray-800">
+                          <ul className="mt-1 grid grid-cols-2 gap-2 text-xs text-gray-900">
                             <li>
-                              <span className="font-thin">Amount: </span>
+                              <span className="font-thin text-gray-700">
+                                Amount:{" "}
+                              </span>
                               {item.amount}
                             </li>
                             <li>
-                              <span className="font-thin">Location: </span>
+                              <span className="font-thin text-gray-700">
+                                Location:{" "}
+                              </span>
                               {item.location}
                             </li>
                           </ul>
@@ -103,7 +109,9 @@ export default function ItemsPage() {
           )}
         </div>
 
-        <div className="flex-1 basis-4/5 p-6 empty:hidden overflow-auto shadow-top bg-fuchsia-50">
+        <div
+          className={`max-h-screen fixed min-h-[60vh] h-auto bottom-0 left-0 w-full border-t-4 border-l-2 empty:hidden flex-1 p-6 rounded-tl-xl overflow-auto shadow-top bg-fuchsia-50 border-fuchsia-600 bg-noise`}
+        >
           <Outlet />
         </div>
       </main>

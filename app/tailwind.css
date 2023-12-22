@@ -7,5 +7,9 @@
 }
 
 .shadow-top {
-  box-shadow: 0 -10px 40px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 -28px 69px 43px rgba(0, 0, 0, 0.4);
+}
+
+.bg-noise {
+  background-image: url("/img/bg-noise.svg");
 }

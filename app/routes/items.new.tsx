@@ -1,11 +1,11 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { useEffect, useRef } from "react";
-import BackToIndex from "~/components/backToIndex";
 
+import BackToIndex from "~/components/backToIndex";
 import { createItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
+import { categoryNames } from "~/shared";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -65,18 +65,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function NewItemPage() {
   const actionData = useActionData<typeof action>();
-  const titleRef = useRef<HTMLInputElement>(null);
-  const amountRef = useRef<HTMLInputElement>(null);
-  const locationRef = useRef<HTMLSelectElement>(null);
-  const categoryRef = useRef<HTMLSelectElement>(null);
-
-  useEffect(() => {
-    if (actionData?.errors?.title) {
-      titleRef.current?.focus();
-    } else if (actionData?.errors?.amount) {
-      amountRef.current?.focus();
-    }
-  }, [actionData]);
 
   return (
     <Form
@@ -88,15 +76,20 @@ export default function NewItemPage() {
         width: "100%",
       }}
     >
-      <BackToIndex />
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-2xl font-bold">Add an item</h3>
+        <BackToIndex />
+      </div>
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>
           <input
-            ref={titleRef}
+            // ref={titleRef}
             name="title"
             required
             className="flex-1 rounded"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
             aria-invalid={actionData?.errors?.title ? true : undefined}
             aria-errormessage={
               actionData?.errors?.title ? "title-error" : undefined
@@ -113,7 +106,7 @@ export default function NewItemPage() {
         <label className="flex w-full flex-col gap-1">
           <span>Amount: </span>
           <input
-            ref={amountRef}
+            // ref={amountRef}
             name="amount"
             required
             className="flex-1 rounded"
@@ -133,7 +126,6 @@ export default function NewItemPage() {
         <label className="flex w-full flex-col gap-1">
           <span>Location: </span>
           <select
-            ref={locationRef}
             name="location"
             required
             className="flex-1 rounded"
@@ -151,7 +143,6 @@ export default function NewItemPage() {
         <label className="flex w-full flex-col gap-1">
           <span>Category: </span>
           <select
-            ref={categoryRef}
             name="category"
             className="flex-1 rounded"
             aria-invalid={actionData?.errors?.category ? true : undefined}
@@ -159,9 +150,9 @@ export default function NewItemPage() {
               actionData?.errors?.category ? "category-error" : undefined
             }
           >
-            <option value="Misc" label="Misc" />
-            <option value="Meat" label="Meat" />
-            <option value="Ready Meal" label="Ready Meal" />
+            {categoryNames.map((c) => (
+              <option value={c} label={c} key={c} />
+            ))}
           </select>
         </label>
         {actionData?.errors?.category ? (
@@ -171,7 +162,7 @@ export default function NewItemPage() {
         ) : null}
       </div>
 
-      <div className="text-right mt-4">
+      <div className="text-right mt-8">
         <button type="submit" className="btn">
           Save
         </button>

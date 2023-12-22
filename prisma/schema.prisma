@@ -30,7 +30,7 @@ model Item {
   title     String
   amount    String
   location  String
-  category  String?
+  category  String
   needsMore Boolean?
 
   createdAt DateTime @default(now())

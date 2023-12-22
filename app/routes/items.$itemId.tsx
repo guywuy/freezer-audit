@@ -8,6 +8,7 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
+import BackToIndex from "~/components/backToIndex";
 import { deleteItem, getItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
 
@@ -36,13 +37,13 @@ export default function ItemDetailsPage() {
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">{data.item.title}</h3>
+      <div className="flex justify-between items-center">
+        <h3 className="text-2xl font-bold">{data.item.title}</h3>
+        <BackToIndex />
+      </div>
       <hr className="my-4" />
       <Form method="post">
-        <button
-          type="submit"
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-        >
+        <button type="submit" className="btn">
           Delete
         </button>
       </Form>

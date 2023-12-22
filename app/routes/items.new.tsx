@@ -2,6 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import BackToIndex from "~/components/backToIndex";
 
 import { createItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
@@ -38,28 +39,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (typeof location !== "string" || location.length === 0) {
     return json(
-      { errors: { ...errors, location: "Body is required" } },
+      { errors: { ...errors, location: "Location is required" } },
       { status: 400 },
     );
   }
 
-  if (category && typeof category !== "string") {
+  if (typeof category !== "string" || category.length === 0) {
     return json(
-      { errors: { ...errors, category: "Body is required" } },
+      { errors: { ...errors, category: "Category is required" } },
       { status: 400 },
     );
   }
 
-  const item = await createItem({
+  await createItem({
     userId,
     title,
     amount,
     location,
-    category: category || null,
+    category,
     needsMore: false,
   });
 
-  return redirect(`/items/${item.id}`);
+  return redirect(`/items`);
 };
 
 export default function NewItemPage() {
@@ -87,6 +88,7 @@ export default function NewItemPage() {
         width: "100%",
       }}
     >
+      <BackToIndex />
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>
@@ -94,7 +96,7 @@ export default function NewItemPage() {
             ref={titleRef}
             name="title"
             required
-            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+            className="flex-1 rounded"
             aria-invalid={actionData?.errors?.title ? true : undefined}
             aria-errormessage={
               actionData?.errors?.title ? "title-error" : undefined
@@ -114,7 +116,7 @@ export default function NewItemPage() {
             ref={amountRef}
             name="amount"
             required
-            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+            className="flex-1 rounded"
             aria-invalid={actionData?.errors?.amount ? true : undefined}
             aria-errormessage={
               actionData?.errors?.amount ? "amount-error" : undefined
@@ -134,7 +136,7 @@ export default function NewItemPage() {
             ref={locationRef}
             name="location"
             required
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="flex-1 rounded"
             aria-invalid={actionData?.errors?.location ? true : undefined}
             aria-errormessage={
               actionData?.errors?.location ? "location-error" : undefined
@@ -144,12 +146,14 @@ export default function NewItemPage() {
             <option value="Cellar" label="Cellar" />
           </select>
         </label>
+      </div>
+      <div>
         <label className="flex w-full flex-col gap-1">
           <span>Category: </span>
           <select
             ref={categoryRef}
             name="category"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="flex-1 rounded"
             aria-invalid={actionData?.errors?.category ? true : undefined}
             aria-errormessage={
               actionData?.errors?.category ? "category-error" : undefined
@@ -167,11 +171,8 @@ export default function NewItemPage() {
         ) : null}
       </div>
 
-      <div className="text-right">
-        <button
-          type="submit"
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-        >
+      <div className="text-right mt-4">
+        <button type="submit" className="btn">
           Save
         </button>
       </div>

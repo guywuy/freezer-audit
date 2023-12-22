@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn {
+  @apply rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400;
+}
+
+.shadow-top {
+  box-shadow: 0 -10px 40px 40px rgba(0, 0, 0, 0.4);
+}

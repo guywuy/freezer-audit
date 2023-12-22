@@ -32,6 +32,7 @@ async function seed() {
       title: "Beef burgers",
       amount: "4",
       location: "Kitchen",
+      category: "Meat",
       userId: user.id,
     },
   });

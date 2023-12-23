@@ -3,6 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 
 import BackToIndex from "~/components/backToIndex";
+import SubpageHeader from "~/components/subpageHeader";
 import { createItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
@@ -76,10 +77,7 @@ export default function NewItemPage() {
         width: "100%",
       }}
     >
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-2xl font-bold">Add an item</h3>
-        <BackToIndex />
-      </div>
+      <SubpageHeader title="Add an item" />
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>

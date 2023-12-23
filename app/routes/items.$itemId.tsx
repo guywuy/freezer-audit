@@ -7,9 +7,10 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 
-import BackToIndex from "~/components/backToIndex";
+import SubpageHeader from "~/components/subpageHeader";
 import { deleteItem, getItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
 
@@ -35,20 +36,18 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 export default function ItemDetailsPage() {
   const data = useLoaderData<typeof loader>();
+  const [showDelete, setShowDelete] = useState(false);
 
   return (
     <div>
-      <div className="flex justify-between items-center">
-        <h3 className="text-2xl font-bold">{data.item.title}</h3>
-        <BackToIndex />
-      </div>
-      <hr className="my-4" />
-      <ul className="mb-4 grid grid-cols-2 gap-2 text-xs text-gray-800">
+      <SubpageHeader title={data.item.title} />
+      <hr className="mb-4" />
+      <ul className="mb-4 grid font-bold gap-2 text-sm text-gray-800">
         <li>
           <span className="font-thin">Amount: </span>
           {data.item.amount}
         </li>
-        <li>
+        <li className="mb-3">
           <span className="font-thin">Location: </span>
           {data.item.location}
         </li>
@@ -62,13 +61,25 @@ export default function ItemDetailsPage() {
         </li>
       </ul>
       <div className="flex justify-end gap-2 my-3">
-        <Link to={"edit"} className="btn">Edit</Link>
-        <Form method="post">
-          <button type="submit" className="btn !bg-red-800">
-            Delete
-          </button>
-        </Form>
+        <Link to={"edit"} className="btn">
+          Edit
+        </Link>
+        <button
+          onClick={() => setShowDelete(!showDelete)}
+          className={`btn ${!showDelete && "!bg-red-800"}`}
+        >
+          {showDelete ? "Cancel" : "Delete"}
+        </button>
       </div>
+      {showDelete && (
+        <div className="flex justify-end mt-6">
+          <Form method="post">
+            <button type="submit" className="btn !bg-red-800">
+              Are you sure?!
+            </button>
+          </Form>
+        </div>
+      )}
     </div>
   );
 }

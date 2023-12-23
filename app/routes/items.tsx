@@ -16,17 +16,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function ItemsPage() {
   const data = useLoaderData<typeof loader>();
 
-  const categoryList = data.itemListItems.reduce(
-    (catOb, item) => {
-      if (catOb[item.category]) {
-        catOb[item.category].push(item);
-      } else {
-        catOb[item.category] = [item];
-      }
-      return catOb;
-    },
-    {} as Record<string, Partial<Item>[]>,
-  );
+  const outOfStock = data.itemListItems.filter((item) => item.needsMore);
+  const categoryList = data.itemListItems
+    .filter((item) => !item.needsMore)
+    .reduce(
+      (catOb, item) => {
+        if (catOb[item.category]) {
+          catOb[item.category].push(item);
+        } else {
+          catOb[item.category] = [item];
+        }
+        return catOb;
+      },
+      {} as Record<string, Partial<Item>[]>,
+    );
 
   const categoryKeys = Object.keys(categoryList);
   const usedCategoriesInOrder = categoryInfos.filter(
@@ -55,12 +58,46 @@ export default function ItemsPage() {
 
       <main className="flex flex-col h-full">
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
+          {outOfStock.length > 0 ? (
+            <details className="w-full border-red-700 border-y-2 mb-4">
+              <summary className="font-bold p-2">We need to buy...</summary>
+              <ul>
+                {outOfStock.map((item) => (
+                  <li key={item.id}>
+                    <NavLink
+                      className={({ isActive }) =>
+                        `block p-2 bg-opacity-50 border-t border-slate-200 ${
+                          isActive ? "bg-fuchsia-100" : ""
+                        }`
+                      }
+                      to={item.id!}
+                    >
+                      {item.title}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ) : null}
+
+          <ol className="flex flex-wrap gap-2 px-2">
+            {usedCategoriesInOrder.map((category) => (
+              <Link
+                key={category.name}
+                to={`#${category.slug}`}
+                className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
+              >
+                {category.name}
+              </Link>
+            ))}
+          </ol>
+
           {categoryKeys.length === 0 ? (
             <p className="p-4">No items yet</p>
           ) : (
             <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (
-                <li key={category.name} className="-mt-8">
+                <li key={category.name} className="-mt-8" id={category.slug}>
                   <header
                     className={`pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
                       category.bgColourClass || "bg-teal-400"
@@ -75,17 +112,20 @@ export default function ItemsPage() {
                     }`}
                   >
                     {categoryList[category.name].map((item) => (
-                      <li key={item.id} className="last:pb-10 bg-gradient-to-tr from-white to-gray-50">
+                      <li
+                        key={item.id}
+                        className="last:pb-10 bg-gradient-to-tr from-white to-gray-50"
+                      >
                         <NavLink
                           className={({ isActive }) =>
-                            `block p-2 py-3 text-xl bg-opacity-50 ${
+                            `block p-2 py-3 text-xl bg-opacity-50 leading-tight ${
                               isActive ? "bg-fuchsia-100" : ""
                             }`
                           }
                           to={item.id!}
                         >
                           {item.title}
-                          <ul className="mt-1 grid grid-cols-2 gap-2 text-xs text-gray-900">
+                          <ul className="mt-1.5 grid grid-cols-2 gap-2 text-xs text-gray-900 font-bold">
                             <li>
                               <span className="font-thin text-gray-700">
                                 Amount:{" "}

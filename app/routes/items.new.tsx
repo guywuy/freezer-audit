@@ -2,7 +2,6 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 
-import BackToIndex from "~/components/backToIndex";
 import SubpageHeader from "~/components/subpageHeader";
 import { createItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";

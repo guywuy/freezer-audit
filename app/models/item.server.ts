@@ -88,7 +88,7 @@ export function updateItem({
       amount,
       location,
       category,
-      needsMore
+      needsMore,
     },
   });
 }
@@ -99,5 +99,17 @@ export function deleteItem({
 }: Pick<Item, "id"> & { userId: User["id"] }) {
   return prisma.item.deleteMany({
     where: { id, userId },
+  });
+}
+
+export function markItemNeedsMore({
+  id,
+  needsMore,
+}: Pick<Item, "id" | "needsMore">) {
+  return prisma.item.update({
+    where: { id },
+    data: {
+      needsMore,
+    },
   });
 }

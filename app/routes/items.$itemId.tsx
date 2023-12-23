@@ -82,16 +82,35 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 export default function ItemDetailsPage() {
   const data = useLoaderData<typeof loader>();
+  const { item } = data;
   const actionData = useActionData<typeof action>();
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
   return (
     <div>
-      <SubpageHeader title={data.item.title} />
+      <SubpageHeader title={item.title} />
       <hr className="mb-4" />
+      {item.needsMore ? (
+        <>
+          <p className="my-6">Out of stock :/</p>
+          <div className="flex justify-end gap-4">
+            <Form method="post" action={`/items/${item.id}/needsmore`}>
+              <input type="hidden" value="false" name="needsmore" />
+              <button type="submit" className="btn !bg-green-800">
+                We have it again!
+              </button>
+            </Form>
 
-      {showEdit ? (
+            <button
+              onClick={() => setShowDelete(!showDelete)}
+              className={`btn ${!showDelete && "!bg-red-800"}`}
+            >
+              {showDelete ? "Cancel" : "Delete"}
+            </button>
+          </div>
+        </>
+      ) : showEdit ? (
         <Form
           method="post"
           style={{
@@ -108,7 +127,7 @@ export default function ItemDetailsPage() {
                 name="title"
                 required
                 className="flex-1 rounded"
-                defaultValue={data.item.title}
+                defaultValue={item.title}
                 // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
                 aria-invalid={actionData?.errors?.title ? true : undefined}
@@ -130,7 +149,7 @@ export default function ItemDetailsPage() {
                 name="amount"
                 required
                 className="flex-1 rounded"
-                defaultValue={data.item.amount}
+                defaultValue={item.amount}
                 aria-invalid={actionData?.errors?.amount ? true : undefined}
                 aria-errormessage={
                   actionData?.errors?.amount ? "amount-error" : undefined
@@ -150,7 +169,7 @@ export default function ItemDetailsPage() {
                 name="location"
                 required
                 className="flex-1 rounded"
-                defaultValue={data.item.location}
+                defaultValue={item.location}
                 aria-invalid={actionData?.errors?.location ? true : undefined}
                 aria-errormessage={
                   actionData?.errors?.location ? "location-error" : undefined
@@ -167,7 +186,7 @@ export default function ItemDetailsPage() {
               <select
                 name="category"
                 className="flex-1 rounded"
-                defaultValue={data.item.category}
+                defaultValue={item.category}
                 aria-invalid={actionData?.errors?.category ? true : undefined}
                 aria-errormessage={
                   actionData?.errors?.category ? "category-error" : undefined
@@ -196,22 +215,28 @@ export default function ItemDetailsPage() {
           <ul className="mb-4 grid font-bold gap-2 text-sm text-gray-800">
             <li>
               <span className="font-thin">Amount: </span>
-              {data.item.amount}
+              {item.amount}
             </li>
             <li className="mb-3">
               <span className="font-thin">Location: </span>
-              {data.item.location}
+              {item.location}
             </li>
             <li>
               <span className="font-thin">Created at: </span>
-              {data.item.createdAt?.substring(0, 10)}
+              {item.createdAt?.substring(0, 10)}
             </li>
             <li>
               <span className="font-thin">Updated at: </span>
-              {data.item.updatedAt?.substring(0, 10)}
+              {item.updatedAt?.substring(0, 10)}
             </li>
           </ul>
           <div className="flex justify-end gap-2 my-3">
+            <Form method="post" action={`/items/${item.id}/needsmore`}>
+              <input type="hidden" value="true" name="needsmore" />
+              <button type="submit" className="btn !bg-fuchsia-800">
+                We need to buy more
+              </button>
+            </Form>
             <button onClick={() => setShowEdit(!showEdit)} className={`btn`}>
               Edit
             </button>
@@ -224,14 +249,16 @@ export default function ItemDetailsPage() {
           </div>
         </>
       )}
-      {showDelete ? <div className="flex justify-end items-center gap-6 mt-6">
+      {showDelete ? (
+        <div className="flex justify-end items-center gap-6 mt-6">
           <p className="font-bold text-lg">Are you sure?!</p>
-          <Form method="post" action={`/items/${data.item.id}/delete`}>
+          <Form method="post" action={`/items/${item.id}/delete`}>
             <button type="submit" className="btn !bg-red-800">
               Yes, delete
             </button>
           </Form>
-        </div> : null}
+        </div>
+      ) : null}
     </div>
   );
 }

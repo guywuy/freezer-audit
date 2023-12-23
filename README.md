@@ -132,5 +132,4 @@ For lower level tests of utilities and individual components, we use `vitest`. W
 
 ### TODO
 
-- Enable item edit - copy create template (or componentise form) and add in needsMore toggle
-- List page - separate grouping for needsMore. Filter out items first into other array
+- PWA

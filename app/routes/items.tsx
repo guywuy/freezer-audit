@@ -58,9 +58,9 @@ export default function ItemsPage() {
           {categoryKeys.length === 0 ? (
             <p className="p-4">No items yet</p>
           ) : (
-            <ol className="mt-8">
+            <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (
-                <li key={category.name} className="-mt-6 bg-gradient-to-r from-white to-gray-50">
+                <li key={category.name} className="-mt-8">
                   <header
                     className={`pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
                       category.bgColourClass || "bg-teal-400"
@@ -70,12 +70,12 @@ export default function ItemsPage() {
                     <p className="text-2xl">{category.emoji}</p>
                   </header>
                   <ol
-                    className={`mb-2 divide-y divide-fuchsia-200 border-l-4 last:pb-6 ${
+                    className={`mb-2 divide-y divide-fuchsia-200 border-l-4 ${
                       category.borderColourClass || "border-teal-400"
                     }`}
                   >
                     {categoryList[category.name].map((item) => (
-                      <li key={item.id}>
+                      <li key={item.id} className="last:pb-10 bg-gradient-to-tr from-white to-gray-50">
                         <NavLink
                           className={({ isActive }) =>
                             `block p-2 py-3 text-xl bg-opacity-50 ${

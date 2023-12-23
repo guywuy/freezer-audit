@@ -2,6 +2,15 @@ import type { User, Item } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
+interface ItemMutation {
+  id: string;
+  title?: string;
+  amount?: string;
+  location?: string;
+  category?: string;
+  needsMore?: boolean;
+}
+
 export function getItem({
   id,
   userId,
@@ -60,6 +69,26 @@ export function createItem({
           id: userId,
         },
       },
+    },
+  });
+}
+
+export function updateItem({
+  id,
+  title,
+  amount,
+  location,
+  category,
+  needsMore,
+}: ItemMutation) {
+  return prisma.item.update({
+    where: { id },
+    data: {
+      title,
+      amount,
+      location,
+      category,
+      needsMore
     },
   });
 }

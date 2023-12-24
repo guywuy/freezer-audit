@@ -37,7 +37,7 @@ export default function ItemsPage() {
   );
 
   return (
-    <div className="flex h-full min-h-screen flex-col bg-gray-50">
+    <div className="flex h-full min-h-screen flex-col">
       <header className="flex items-center justify-between p-4 pl-2 text-white">
         <Form action="/logout" method="post">
           <button
@@ -59,19 +59,28 @@ export default function ItemsPage() {
       <main className="flex flex-col h-full">
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           {outOfStock.length > 0 ? (
-            <details className="w-full border-red-700 border-y-2 mb-4">
+            <details className="w-full border-red-700 border-2 bg-red-50 mb-4">
               <summary className="font-bold p-2">We need to buy...</summary>
               <ul>
-                {outOfStock.map((item) => (
+                {outOfStock.map((item, index) => (
                   <li key={item.id}>
                     <NavLink
                       className={({ isActive }) =>
-                        `block p-2 bg-opacity-50 border-t border-slate-200 ${
+                        `block px-2 py-3 my-1 bg-opacity-50 border-t border-slate-200 ${
                           isActive ? "bg-fuchsia-100" : ""
                         }`
                       }
                       to={item.id!}
                     >
+                      <span className="inline-flex text-xl mr-2">
+                        {index % 4 === 0
+                          ? "🥸"
+                          : index % 4 === 1
+                          ? "🧐"
+                          : index % 4 === 2
+                          ? "😱"
+                          : "🤠"}
+                      </span>
                       {item.title}
                     </NavLink>
                   </li>
@@ -80,14 +89,14 @@ export default function ItemsPage() {
             </details>
           ) : null}
 
-          <ol className="flex flex-wrap gap-2 px-2">
+          <ol className="flex flex-wrap gap-2.5 px-2">
             {usedCategoriesInOrder.map((category) => (
               <Link
                 key={category.name}
                 to={`#${category.slug}`}
                 className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
               >
-                {category.name}
+                {category.name} &nbsp;{category.emoji}
               </Link>
             ))}
           </ol>
@@ -118,7 +127,7 @@ export default function ItemsPage() {
                       >
                         <NavLink
                           className={({ isActive }) =>
-                            `block p-2 py-3 text-xl bg-opacity-50 leading-tight ${
+                            `block p-2 py-3 text-xl bg-opacity-50 leading-tight text-balance ${
                               isActive ? "bg-fuchsia-100" : ""
                             }`
                           }

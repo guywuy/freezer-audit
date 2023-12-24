@@ -7,7 +7,7 @@ interface Props {
 export default function BackToIndex({ style = "" }: Props) {
   return (
     <NavLink
-      className={`bg-white p-2 border border-neutral-200 rounded-md self-end justify-self-end ${style}`}
+      className={`bg-white p-2 border-2 border-fuchsia-600 rounded-md self-end justify-self-end ${style}`}
       to="/items"
     >
       <svg

@@ -230,21 +230,21 @@ export default function ItemDetailsPage() {
               {item.updatedAt?.substring(0, 10)}
             </li>
           </ul>
-          <div className="flex justify-end gap-2 my-3">
+          <div className="flex justify-end gap-2 mb-3 mt-8">
             <Form method="post" action={`/items/${item.id}/needsmore`}>
               <input type="hidden" value="true" name="needsmore" />
               <button type="submit" className="btn !bg-fuchsia-800">
                 We need to buy more
               </button>
             </Form>
-            <button onClick={() => setShowEdit(!showEdit)} className={`btn`}>
-              Edit
-            </button>
             <button
               onClick={() => setShowDelete(!showDelete)}
-              className={`btn ${!showDelete && "!bg-red-800"}`}
+              className={`btn ml-auto ${!showDelete && "!bg-red-800"}`}
             >
               {showDelete ? "Cancel" : "Delete"}
+            </button>
+            <button onClick={() => setShowEdit(!showEdit)} className={`btn`}>
+              Edit
             </button>
           </div>
         </>

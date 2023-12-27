@@ -3,7 +3,7 @@ import { Link } from "@remix-run/react";
 
 import { useOptionalUser } from "~/utils";
 
-export const meta: MetaFunction = () => [{ title: "Freeza audit" }];
+export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
 
 export default function Index() {
   const user = useOptionalUser();
@@ -20,7 +20,7 @@ export default function Index() {
           to="/items"
           className="flex items-center justify-center rounded-md bg-yellow-500 px-4 py-3 font-medium text-white hover:bg-yellow-600"
         >
-          View Frooozen Items for {user.username}
+          View Frozen Items for {user.username}
         </Link>
       ) : (
         <Link

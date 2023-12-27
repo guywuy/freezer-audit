@@ -1,11 +1,13 @@
 import { Item } from "@prisma/client";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import { getItemListItems } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
 import { categoryInfos } from "~/shared";
+
+export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -40,8 +42,8 @@ export default function ItemsPage() {
     <div className="flex h-full min-h-screen flex-col">
       <header className="flex items-center justify-between p-4 pl-2 text-white">
         <details>
-          <summary className="text-black">Menu</summary>
-          <div className="flex gap-4 items-center pt-3">
+          <summary className="text-black p-2 font-bold relative">Menu</summary>
+          <div className="absolute w-full border-b flex flex-wrap gap-4 items-center py-3 mt-1 bg-white">
             <Form action="/logout" method="post">
               <button
                 type="submit"
@@ -111,7 +113,7 @@ export default function ItemsPage() {
           </ol>
 
           {categoryKeys.length === 0 ? (
-            <p className="p-4">No items yet</p>
+            <p className="p-4">No items yet. Try adding a freezer location in the menu, then add some items.</p>
           ) : (
             <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (

@@ -1,7 +1,6 @@
-import { Location } from "@prisma/client";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
 
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";

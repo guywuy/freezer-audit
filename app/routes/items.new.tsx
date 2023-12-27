@@ -1,11 +1,18 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 
 import SubpageHeader from "~/components/subpageHeader";
 import { createItem } from "~/models/item.server";
+import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const userId = await requireUserId(request);
+  const locationListItems = await getLocationListItems({ userId });
+  return json({ locationListItems });
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -64,6 +71,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function NewItemPage() {
+  const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   return (
@@ -131,8 +139,16 @@ export default function NewItemPage() {
               actionData?.errors?.location ? "location-error" : undefined
             }
           >
-            <option value="Kitchen" label="Kitchen" />
-            <option value="Cellar" label="Cellar" />
+            {data.locationListItems.length > 0 ? (
+              data.locationListItems.map((loc) => (
+                <option key={loc.title} value={loc.title} label={loc.title} />
+              ))
+            ) : (
+              <>
+                <option value="Kitchen" label="Kitchen" />
+                <option value="Cellar" label="Cellar" />
+              </>
+            )}
           </select>
         </label>
       </div>

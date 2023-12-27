@@ -14,8 +14,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password Password?
-  items    Item[]
+  password  Password?
+  items     Item[]
+  locations Location[]
 }
 
 model Password {
@@ -33,6 +34,16 @@ model Item {
   category  String
   needsMore Boolean?
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  title     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

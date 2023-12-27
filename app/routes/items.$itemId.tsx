@@ -12,6 +12,7 @@ import invariant from "tiny-invariant";
 
 import SubpageHeader from "~/components/subpageHeader";
 import { getItem, updateItem } from "~/models/item.server";
+import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
 
@@ -23,7 +24,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   if (!item) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json({ item });
+  const locationListItems = await getLocationListItems({ userId });
+  return json({ item, locationListItems });
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -175,8 +177,20 @@ export default function ItemDetailsPage() {
                   actionData?.errors?.location ? "location-error" : undefined
                 }
               >
-                <option value="Kitchen" label="Kitchen" />
-                <option value="Cellar" label="Cellar" />
+                {data.locationListItems.length > 0 ? (
+                  data.locationListItems.map((loc) => (
+                    <option
+                      key={loc.title}
+                      value={loc.title}
+                      label={loc.title}
+                    />
+                  ))
+                ) : (
+                  <>
+                    <option value="Kitchen" label="Kitchen" />
+                    <option value="Cellar" label="Cellar" />
+                  </>
+                )}
               </select>
             </label>
           </div>

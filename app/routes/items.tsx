@@ -39,14 +39,23 @@ export default function ItemsPage() {
   return (
     <div className="flex h-full min-h-screen flex-col">
       <header className="flex items-center justify-between p-4 pl-2 text-white">
-        <Form action="/logout" method="post">
-          <button
-            type="submit"
-            className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
-          >
-            Logout
-          </button>
-        </Form>
+        <details>
+          <summary className="text-black">Menu</summary>
+          <div className="flex gap-4 items-center pt-3">
+            <Form action="/logout" method="post">
+              <button
+                type="submit"
+                className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
+              >
+                Logout
+              </button>
+            </Form>
+
+            <Link to="/locations" className="btn">
+              Freezer Locations
+            </Link>
+          </div>
+        </details>
 
         <Link
           to="new"

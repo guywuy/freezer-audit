@@ -12,8 +12,7 @@ import { createUserSession, getUserId } from "~/session.server";
 import { safeRedirect, validateUsername } from "~/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // For now disallow joining...
-  return redirect("/");
+  // return redirect("/");
   const userId = await getUserId(request);
   if (userId) return redirect("/");
   return json({});
@@ -75,12 +74,12 @@ export default function Join() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
-  const emailRef = useRef<HTMLInputElement>(null);
+  const userNameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (actionData?.errors?.username) {
-      emailRef.current?.focus();
+      userNameRef.current?.focus();
     } else if (actionData?.errors?.password) {
       passwordRef.current?.focus();
     }
@@ -99,7 +98,7 @@ export default function Join() {
             </label>
             <div className="mt-1">
               <input
-                ref={emailRef}
+                ref={userNameRef}
                 id="username"
                 required
                 // eslint-disable-next-line jsx-a11y/no-autofocus

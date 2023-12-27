@@ -2,13 +2,14 @@ import { NavLink } from "@remix-run/react";
 
 interface Props {
   style?: string;
+  backTo?: string;
 }
 
-export default function BackToIndex({ style = "" }: Props) {
+export default function BackToIndex({ style = "", backTo }: Props) {
   return (
     <NavLink
       className={`bg-white p-2 border-2 border-fuchsia-600 rounded-md self-end justify-self-end ${style}`}
-      to="/items"
+      to={backTo ? backTo : "/items"}
     >
       <svg
         height="24"

@@ -26,7 +26,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!validateUsername(username)) {
     return json(
-      { errors: { username: "Email is invalid", password: null } },
+      { errors: { username: "Username is invalid", password: null } },
       { status: 400 },
     );
   }
@@ -94,7 +94,7 @@ export default function Join() {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700"
             >
-              Email address
+              Username
             </label>
             <div className="mt-1">
               <input
@@ -122,7 +122,7 @@ export default function Join() {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              Password (min 8 chars)
             </label>
             <div className="mt-1">
               <input

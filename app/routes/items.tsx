@@ -67,6 +67,7 @@ export default function ItemsPage() {
     // Convert items data to a csv
     const itemsCSV = data.itemListItems
       .sort((a, b) => (a.category > b.category ? -1 : 1))
+      .sort((a) => (a.needsMore ? 1 : -1))
       .reduce((acc, item) => {
         const { title, amount, location, category, needsMore } = item;
         acc.push(
@@ -95,8 +96,8 @@ export default function ItemsPage() {
       <header className="flex items-center justify-between p-4 pl-2">
         <details>
           <summary className="text-black p-2 font-bold relative">Menu</summary>
-          <nav className="absolute left-0 w-full py-3 mt-1 bg-white border shadow z-10">
-            <ul className="flex flex-col gap-4 min-h-[50vh] shadow px-2">
+          <nav className="absolute left-0 w-full py-3 mt-1 bg-gray-50 border-bottom shadow-xl z-10">
+            <ul className="flex flex-col gap-6 min-h-[50vh] px-2">
               <li className="pt-4">
                 <Link to="/locations" className="btn">
                   Freezer Locations
@@ -104,7 +105,7 @@ export default function ItemsPage() {
               </li>
               <li>
                 <button className="btn" onClick={exportToCsv}>
-                  Export to CSV
+                  Export items to CSV
                 </button>
               </li>
               <li className="mt-auto">

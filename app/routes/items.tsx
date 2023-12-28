@@ -38,25 +38,87 @@ export default function ItemsPage() {
     (cat) => categoryList[cat.name],
   );
 
+  const downloadFile = ({
+    data,
+    fileName,
+    fileType,
+  }: {
+    data: string;
+    fileName: string;
+    fileType: string;
+  }) => {
+    const blob = new Blob([data], { type: fileType });
+
+    const a = document.createElement("a");
+    a.download = fileName;
+    a.href = window.URL.createObjectURL(blob);
+    const clickEvt = new MouseEvent("click", {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
+  };
+  const exportToCsv = () => {
+    // Headers for each column
+    const headers = ["Title,Amount,Location,Category,OutOfStock"];
+
+    // Convert items data to a csv
+    const itemsCSV = data.itemListItems
+      .sort((a, b) => (a.category > b.category ? -1 : 1))
+      .reduce((acc, item) => {
+        const { title, amount, location, category, needsMore } = item;
+        acc.push(
+          [
+            title.replace(/,/g, ""),
+            amount,
+            location,
+            category,
+            needsMore ? "Yes" : "No",
+          ].join(","),
+        );
+        return acc;
+      }, [] as string[]);
+
+    downloadFile({
+      data: [...headers, ...itemsCSV].join("\n"),
+      fileName: `freezer-audit-${new Date()
+        .toISOString()
+        .substring(0, 10)}.csv`,
+      fileType: "text/csv",
+    });
+  };
+
   return (
     <div className="flex h-full min-h-screen flex-col">
-      <header className="flex items-center justify-between p-4 pl-2 text-white">
+      <header className="flex items-center justify-between p-4 pl-2">
         <details>
           <summary className="text-black p-2 font-bold relative">Menu</summary>
-          <div className="absolute w-full border-b flex flex-wrap gap-4 items-center py-3 mt-1 bg-white">
-            <Form action="/logout" method="post">
-              <button
-                type="submit"
-                className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
-              >
-                Logout
-              </button>
-            </Form>
-
-            <Link to="/locations" className="btn">
-              Freezer Locations
-            </Link>
-          </div>
+          <nav className="absolute left-0 w-full py-3 mt-1 bg-white border shadow z-10">
+            <ul className="flex flex-col gap-4 min-h-[50vh] shadow px-2">
+              <li className="pt-4">
+                <Link to="/locations" className="btn">
+                  Freezer Locations
+                </Link>
+              </li>
+              <li>
+                <button className="btn" onClick={exportToCsv}>
+                  Export to CSV
+                </button>
+              </li>
+              <li className="mt-auto">
+                <Form action="/logout" method="post">
+                  <button
+                    type="submit"
+                    className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
+                  >
+                    Logout
+                  </button>
+                </Form>
+              </li>
+            </ul>
+          </nav>
         </details>
 
         <Link
@@ -113,7 +175,10 @@ export default function ItemsPage() {
           </ol>
 
           {categoryKeys.length === 0 ? (
-            <p className="p-4">No items yet. Try adding a freezer location in the menu, then add some items.</p>
+            <p className="p-4">
+              No items yet. Try adding a freezer location in the menu, then add
+              some items.
+            </p>
           ) : (
             <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (

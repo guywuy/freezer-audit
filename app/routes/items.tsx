@@ -71,7 +71,7 @@ export default function ItemsPage() {
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           {outOfStock.length > 0 ? (
             <details className="w-full border-red-700 border-2 bg-red-50 mb-4">
-              <summary className="font-bold p-2">We need to buy...</summary>
+              <summary className="font-bold p-2">We need to restock...</summary>
               <ul>
                 {outOfStock.map((item, index) => (
                   <li key={item.id}>
@@ -119,7 +119,7 @@ export default function ItemsPage() {
               {usedCategoriesInOrder.map((category) => (
                 <li key={category.name} className="-mt-8" id={category.slug}>
                   <header
-                    className={`pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
+                    className={`sticky top-0 pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
                       category.bgColourClass || "bg-teal-400"
                     } ${category.borderColourClass || "bg-teal-50"}`}
                   >

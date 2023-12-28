@@ -134,5 +134,4 @@ For lower level tests of utilities and individual components, we use `vitest`. W
 
 - Add filter by location to items list page
 - Maybe add search filter by name
-- Add sticky positioning to category headers?
 - Add export to CSV...

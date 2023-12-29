@@ -73,8 +73,8 @@ export default function ItemsPage() {
         acc.push(
           [
             title.replace(/,/g, ""),
-            amount,
-            location,
+            amount.replace(/,/g, ""),
+            location.replace(/,/g, ""),
             category,
             needsMore ? "Yes" : "No",
           ].join(","),
@@ -200,6 +200,7 @@ export default function ItemsPage() {
                     {categoryList[category.name].map((item) => (
                       <li
                         key={item.id}
+                        id={item.id}
                         className="last:pb-10 bg-gradient-to-tr from-white to-gray-50"
                       >
                         <NavLink

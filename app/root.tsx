@@ -52,7 +52,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full max-w-4xl mx-auto bg-gray-50">
+      <body className="h-full max-w-4xl mx-auto bg-gray-50 scroll-pt-20 scroll-smooth">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

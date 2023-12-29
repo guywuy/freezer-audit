@@ -58,7 +58,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  await createItem({
+  const newItem = await createItem({
     userId,
     title,
     amount,
@@ -67,7 +67,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     needsMore: false,
   });
 
-  return redirect(`/items`);
+  return redirect(`/items#${newItem.id}`);
 };
 
 export default function NewItemPage() {

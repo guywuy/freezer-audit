@@ -79,3 +79,5 @@ const validUsers = ['dontworry', 'ackworth'];
 export function validateUsername(username: unknown): username is string {
   return typeof username === "string" && username.length > 3 && validUsers.includes(username);
 }
+
+export const nameToSlug = (name: string) => name.replaceAll(' ', '');

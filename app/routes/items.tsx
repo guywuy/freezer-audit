@@ -8,6 +8,7 @@ import { getItemListItems } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryInfos } from "~/shared";
+import { nameToSlug } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
 
@@ -210,7 +211,7 @@ export default function ItemsPage() {
             {usedCategoriesInOrder.map((category) => (
               <Link
                 key={category.name}
-                to={`#${category.slug}`}
+                to={`#${nameToSlug(category.name)}`}
                 className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
               >
                 {category.name} &nbsp;{category.emoji}
@@ -226,7 +227,7 @@ export default function ItemsPage() {
           ) : (
             <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (
-                <li key={category.name} className="-mt-8" id={category.slug}>
+                <li key={category.name} className="-mt-8" id={nameToSlug(category.name)}>
                   <header
                     className={`sticky top-0 pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
                       category.bgColourClass || "bg-teal-400"

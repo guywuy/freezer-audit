@@ -7,6 +7,7 @@ import { createItem } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
+import { nameToSlug } from "~/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -58,7 +59,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const newItem = await createItem({
+  await createItem({
     userId,
     title,
     amount,
@@ -67,7 +68,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     needsMore: false,
   });
 
-  return redirect(`/items#${newItem.id}`);
+  return redirect(`/items#${nameToSlug(category)}`);
 };
 
 export default function NewItemPage() {

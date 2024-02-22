@@ -2,8 +2,10 @@ import { Item } from "@prisma/client";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 
 import { getItemListItems } from "~/models/item.server";
+import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryInfos } from "~/shared";
 
@@ -12,15 +14,19 @@ export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   const itemListItems = await getItemListItems({ userId });
-  return json({ itemListItems });
+  const locationListItems = await getLocationListItems({ userId });
+
+  return json({ itemListItems, locationListItems });
 };
 
 export default function ItemsPage() {
   const data = useLoaderData<typeof loader>();
+  const [locFilter, setLocFilter] = useState<string | null>(null);
 
   const outOfStock = data.itemListItems.filter((item) => item.needsMore);
   const categoryList = data.itemListItems
     .filter((item) => !item.needsMore)
+    .filter((item) => (locFilter ? item.location === locFilter : item))
     .reduce(
       (catOb, item) => {
         if (catOb[item.category]) {
@@ -134,7 +140,7 @@ export default function ItemsPage() {
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           {outOfStock.length > 0 ? (
             <details className="w-full border-red-700 border-2 bg-red-50 mb-4">
-              <summary className="font-bold p-2">We need to restock...</summary>
+              <summary className="p-2 py-4">We need to restock...</summary>
               <ul>
                 {outOfStock.map((item, index) => (
                   <li key={item.id}>
@@ -163,7 +169,44 @@ export default function ItemsPage() {
             </details>
           ) : null}
 
-          <ol className="flex flex-wrap gap-2.5 px-2">
+          {data.locationListItems.length > 1 ? (
+            <div className="flex flex-wrap items-center gap-2.5 text-sm my-2 px-2 mb-4">
+              <p className="text-xs text-gray-600">Filter by freezer:</p>
+              <div>
+                <button
+                  onClick={() => setLocFilter(null)}
+                  className={`p-1 px-2 border-2 ${
+                    !locFilter
+                      ? "border-green-700 outline outline-2 outline-green-700"
+                      : "border-gray-400"
+                  }`}
+                >
+                  All
+                </button>
+              </div>
+              {data.locationListItems.map((location) => (
+                <div key={location.id}>
+                  <button
+                    onClick={() =>
+                      setLocFilter(
+                        locFilter === location.title ? null : location.title,
+                      )
+                    }
+                    className={`p-1 px-2 border-2 ${
+                      locFilter === location.title
+                        ? "border-green-700 outline outline-2 outline-green-400"
+                        : "border-gray-400"
+                    }`}
+                  >
+                    {location.title}
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <ol className="flex flex-wrap items-center gap-2.5 px-2">
+            <p className="text-xs text-gray-600">Jump to category:</p>
             {usedCategoriesInOrder.map((category) => (
               <Link
                 key={category.name}

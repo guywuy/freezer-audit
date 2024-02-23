@@ -13,3 +13,13 @@
 .bg-noise {
   background-image: url("/img/bg-noise.svg");
 }
+
+details[open] summary ~ * {
+  @apply transition-transform origin-top;
+  animation: spoiler 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes spoiler {
+  0%    {transform: scaleY(0);}
+  100%  {transform: scaleY(1);}
+}

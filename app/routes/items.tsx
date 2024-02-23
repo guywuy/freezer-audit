@@ -25,8 +25,8 @@ export default function ItemsPage() {
   const [locFilter, setLocFilter] = useState<string | null>(null);
 
   const outOfStock = data.itemListItems.filter((item) => item.needsMore);
-  const categoryList = data.itemListItems
-    .filter((item) => !item.needsMore)
+  const inStock = data.itemListItems.filter((item) => !item.needsMore);
+  const categoryList = inStock
     .filter((item) => (locFilter ? item.location === locFilter : item))
     .reduce(
       (catOb, item) => {
@@ -39,6 +39,17 @@ export default function ItemsPage() {
       },
       {} as Record<string, Partial<Item>[]>,
     );
+
+  const totalItems = inStock.length;
+  const totals = new Map<string, number>();
+  data.locationListItems.forEach((l) => totals.set(l.title, 0));
+  const locationFilterObjects = data.locationListItems.map((l) => {
+    return {
+      title: l.title,
+      id: l.id,
+      count: inStock.filter((item) => item.location === l.title).length,
+    };
+  });
 
   const categoryKeys = Object.keys(categoryList);
   const usedCategoriesInOrder = categoryInfos.filter(
@@ -102,7 +113,11 @@ export default function ItemsPage() {
     <div className="flex h-full min-h-screen flex-col">
       <header className="flex items-center justify-between p-4 pl-2">
         <details>
-          <summary className="text-black p-2 font-bold relative">Menu</summary>
+          <summary className="text-black p-2 font-bold relative list-none [&::-webkit-details-marker]:hidden flex items-center gap-1">
+            <svg height="32px" viewBox="0 0 32 32" width="32px">
+              <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
+            </svg>
+          </summary>
           <nav className="absolute left-0 w-full py-3 mt-1 bg-gray-50 border-bottom shadow-xl z-10">
             <ul className="flex flex-col gap-6 min-h-[50vh] px-2">
               <li className="pt-4">
@@ -141,7 +156,17 @@ export default function ItemsPage() {
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           {outOfStock.length > 0 ? (
             <details className="w-full border-red-700 border-2 bg-red-50 mb-4">
-              <summary className="p-2 py-4">We need to restock...</summary>
+              <summary className="p-2 py-4 list-none [&::-webkit-details-marker]:hidden flex items-center gap-1">
+                <svg
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                  className="fill-red-400"
+                >
+                  <path d="M21.171,15.398l-5.912-9.854C14.483,4.251,13.296,3.511,12,3.511s-2.483,0.74-3.259,2.031l-5.912,9.856  c-0.786,1.309-0.872,2.705-0.235,3.83C3.23,20.354,4.472,21,6,21h12c1.528,0,2.77-0.646,3.406-1.771  C22.043,18.104,21.957,16.708,21.171,15.398z M12,17.549c-0.854,0-1.55-0.695-1.55-1.549c0-0.855,0.695-1.551,1.55-1.551  s1.55,0.696,1.55,1.551C13.55,16.854,12.854,17.549,12,17.549z M13.633,10.125c-0.011,0.031-1.401,3.468-1.401,3.468  c-0.038,0.094-0.13,0.156-0.231,0.156s-0.193-0.062-0.231-0.156l-1.391-3.438C10.289,9.922,10.25,9.712,10.25,9.5  c0-0.965,0.785-1.75,1.75-1.75s1.75,0.785,1.75,1.75C13.75,9.712,13.711,9.922,13.633,10.125z" />
+                </svg>
+                We need to restock...
+              </summary>
               <ul>
                 {outOfStock.map((item, index) => (
                   <li key={item.id}>
@@ -170,39 +195,42 @@ export default function ItemsPage() {
             </details>
           ) : null}
 
-          {data.locationListItems.length > 1 ? (
+          {locationFilterObjects.length > 1 ? (
             <div className="flex flex-wrap items-center gap-2.5 text-sm my-2 px-2 mb-4">
               <p className="text-xs text-gray-600">Filter by freezer:</p>
-              <div>
-                <button
-                  onClick={() => setLocFilter(null)}
-                  className={`p-1 px-2 border-2 ${
-                    !locFilter
-                      ? "border-green-700 outline outline-2 outline-green-700"
-                      : "border-gray-400"
-                  }`}
-                >
-                  All
-                </button>
-              </div>
-              {data.locationListItems.map((location) => (
-                <div key={location.id}>
+              <div className="flex flex-wrap gap-2.5 items-center">
+                <div>
                   <button
-                    onClick={() =>
-                      setLocFilter(
-                        locFilter === location.title ? null : location.title,
-                      )
-                    }
+                    onClick={() => setLocFilter(null)}
                     className={`p-1 px-2 border-2 ${
-                      locFilter === location.title
-                        ? "border-green-700 outline outline-2 outline-green-400"
+                      !locFilter
+                        ? "border-green-700 outline outline-2 outline-green-700"
                         : "border-gray-400"
                     }`}
                   >
-                    {location.title}
+                    <span className="font-mono">All</span> - {totalItems}
                   </button>
                 </div>
-              ))}
+                {locationFilterObjects.map((location) => (
+                  <div key={location.id}>
+                    <button
+                      onClick={() =>
+                        setLocFilter(
+                          locFilter === location.title ? null : location.title,
+                        )
+                      }
+                      className={`p-1 px-2 border-2 ${
+                        locFilter === location.title
+                          ? "border-green-700 outline outline-2 outline-green-400"
+                          : "border-gray-400"
+                      }`}
+                    >
+                      <span className="font-mono">{location.title}</span> -{" "}
+                      {location.count}
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : null}
 
@@ -227,7 +255,11 @@ export default function ItemsPage() {
           ) : (
             <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (
-                <li key={category.name} className="-mt-8" id={nameToSlug(category.name)}>
+                <li
+                  key={category.name}
+                  className="-mt-8"
+                  id={nameToSlug(category.name)}
+                >
                   <header
                     className={`sticky top-0 pl-2 pr-4 py-4 gap-4 flex items-center justify-between rounded-tl-xl border-t-4 border-l-4 ${
                       category.bgColourClass || "bg-teal-400"

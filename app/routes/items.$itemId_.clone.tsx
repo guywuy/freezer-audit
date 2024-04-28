@@ -1,6 +1,7 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
+
 import { cloneItem } from "~/models/item.server";
 import { requireUserId } from "~/session.server";
 
@@ -14,6 +15,6 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   return redirect(`/items`);
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async () => {
   return redirect(`/items`);
 };

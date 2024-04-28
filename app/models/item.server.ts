@@ -6,6 +6,7 @@ interface ItemMutation {
   id: string;
   title?: string;
   amount?: string;
+  notes?: string;
   location?: string;
   category?: string;
   needsMore?: boolean;
@@ -22,6 +23,7 @@ export function getItem({
       id: true,
       title: true,
       amount: true,
+      notes: true,
       location: true,
       category: true,
       needsMore: true,
@@ -77,6 +79,7 @@ export function updateItem({
   id,
   title,
   amount,
+  notes,
   location,
   category,
   needsMore,
@@ -86,6 +89,7 @@ export function updateItem({
     data: {
       title,
       amount,
+      notes,
       location,
       category,
       needsMore,

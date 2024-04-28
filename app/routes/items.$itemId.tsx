@@ -33,6 +33,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const title = formData.get("title");
   const amount = formData.get("amount");
+  const notes = formData.get("notes");
   const location = formData.get("location");
   const category = formData.get("category");
 
@@ -40,6 +41,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     title: null,
     amount: null,
     location: null,
+    notes: null,
     category: null,
   };
 
@@ -53,6 +55,13 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   if (typeof amount !== "string" || amount.length === 0) {
     return json(
       { errors: { ...errors, amount: "Amount is required" } },
+      { status: 400 },
+    );
+  }
+
+  if (typeof notes !== "string") {
+    return json(
+      { errors: { ...errors, location: "Notes should be text" } },
       { status: 400 },
     );
   }
@@ -75,6 +84,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     id: params.itemId,
     title,
     amount,
+    notes,
     location,
     category,
   });
@@ -166,6 +176,26 @@ export default function ItemDetailsPage() {
           </div>
           <div>
             <label className="flex w-full flex-col gap-1">
+              <span>Notes: </span>
+              <input
+                name="notes"
+                required
+                className="flex-1 rounded"
+                defaultValue={item.notes || ""}
+                aria-invalid={actionData?.errors?.notes ? true : undefined}
+                aria-errormessage={
+                  actionData?.errors?.notes ? "notes-error" : undefined
+                }
+              />
+            </label>
+            {actionData?.errors?.notes ? (
+              <div className="pt-1 text-red-700" id="notes-error">
+                {actionData.errors.notes}
+              </div>
+            ) : null}
+          </div>
+          <div>
+            <label className="flex w-full flex-col gap-1">
               <span>Location: </span>
               <select
                 name="location"
@@ -234,6 +264,10 @@ export default function ItemDetailsPage() {
             <li className="mb-3">
               <span className="font-thin">Location: </span>
               {item.location}
+            </li>
+            <li className="mb-3">
+              <span className="font-thin">Notes: </span>
+              {item.notes}
             </li>
             <li>
               <span className="font-thin">Created at: </span>

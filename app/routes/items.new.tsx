@@ -63,6 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     userId,
     title,
     amount,
+    notes: "",
     location,
     category,
     needsMore: false,

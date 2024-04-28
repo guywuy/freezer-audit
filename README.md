@@ -133,5 +133,3 @@ For lower level tests of utilities and individual components, we use `vitest`. W
 ### TODO
 
 - Maybe add search filter by name
-- Add ability to add multiple copies of new items
-- Add notes field? e.g to display cooking times

@@ -25,7 +25,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     throw new Response("Not Found", { status: 404 });
   }
   const locationListItems = await getLocationListItems({ userId });
-  return json({ item, locationListItems });
+  return json({ item, locationListItems, userId });
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -279,21 +279,28 @@ export default function ItemDetailsPage() {
             </li>
           </ul>
           <div className="flex justify-end gap-2 mb-3 mt-8">
-            <Form method="post" action={`/items/${item.id}/needsmore`}>
-              <input type="hidden" value="true" name="needsmore" />
-              <button type="submit" className="btn !bg-fuchsia-800">
-                We need to buy more
-              </button>
-            </Form>
             <button
               onClick={() => setShowDelete(!showDelete)}
               className={`btn ml-auto ${!showDelete && "!bg-red-800"}`}
             >
               {showDelete ? "Cancel" : "Delete"}
             </button>
+            <Form method="post" action={`/items/${item.id}/clone`}>
+              <button type="submit" className="btn !bg-amber-500">
+                Clone item
+              </button>
+            </Form>
             <button onClick={() => setShowEdit(!showEdit)} className={`btn`}>
               Edit
             </button>
+          </div>
+          <div className="flex mb-2 mt-2">
+            <Form method="post" action={`/items/${item.id}/needsmore`}>
+              <input type="hidden" value="true" name="needsmore" />
+              <button type="submit" className="btn !bg-fuchsia-800">
+                We need to buy more
+              </button>
+            </Form>
           </div>
         </>
       )}

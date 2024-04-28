@@ -53,10 +53,14 @@ export function createItem({
   userId,
   title,
   amount,
+  notes = "",
   location,
   category,
   needsMore,
-}: Pick<Item, "amount" | "title" | "location" | "needsMore" | "category"> & {
+}: Pick<
+  Item,
+  "amount" | "title" | "notes" | "location" | "needsMore" | "category"
+> & {
   userId: User["id"];
 }) {
   return prisma.item.create({
@@ -65,6 +69,7 @@ export function createItem({
       amount,
       location,
       category,
+      notes,
       needsMore,
       user: {
         connect: {
@@ -73,6 +78,21 @@ export function createItem({
       },
     },
   });
+}
+
+export async function cloneItem({
+  userId,
+  id,
+}: {
+  id: string;
+  userId: User["id"];
+}) {
+  const toClone = await getItem({ id, userId });
+
+  if (toClone !== null) {
+    return createItem({ userId, ...toClone });
+  }
+  return null;
 }
 
 export function updateItem({

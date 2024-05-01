@@ -179,7 +179,6 @@ export default function ItemDetailsPage() {
               <span>Notes: </span>
               <input
                 name="notes"
-                required
                 className="flex-1 rounded"
                 defaultValue={item.notes || ""}
                 aria-invalid={actionData?.errors?.notes ? true : undefined}

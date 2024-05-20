@@ -8,10 +8,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 
-import { getUser } from "~/session.server";
+import { commitSession, getSession, getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
+
+import { FlashMessage } from "./components/FlashMessage";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -19,10 +22,22 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({ user: await getUser(request) });
+  const session = await getSession(request.headers.get("Cookie"));
+  const message = session.get("globalMessage") || null;
+
+  return json(
+    { user: await getUser(request), message },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    },
+  );
 };
 
 export default function App() {
+  const { message } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en" className="h-full">
       <head>
@@ -53,6 +68,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full max-w-4xl mx-auto bg-gray-50 scroll-pt-20 scroll-mt-20 scroll-smooth">
+        {message ? <FlashMessage text={message} variant="SUCCESS" /> : null}
         <Outlet />
         <ScrollRestoration />
         <Scripts />

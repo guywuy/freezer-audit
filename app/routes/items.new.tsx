@@ -5,7 +5,7 @@ import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import SubpageHeader from "~/components/subpageHeader";
 import { createItem } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
-import { requireUserId } from "~/session.server";
+import { commitSession, getSession, requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
 import { nameToSlug } from "~/utils";
 
@@ -69,7 +69,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     needsMore: false,
   });
 
-  return redirect(`/items#${nameToSlug(category)}`);
+  const session = await getSession(request.headers.get("Cookie"));
+
+  session.flash("globalMessage", `${title} added!`);
+
+  return redirect(`/items#${nameToSlug(category)}`, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export default function NewItemPage() {

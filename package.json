@@ -26,10 +26,10 @@
   ],
   "dependencies": {
     "@prisma/client": "^4.16.2",
-    "@remix-run/css-bundle": "^2.4.0",
-    "@remix-run/node": "^2.4.0",
-    "@remix-run/react": "^2.4.0",
-    "@remix-run/serve": "^2.4.0",
+    "@remix-run/css-bundle": "2.9.2",
+    "@remix-run/node": "2.9.2",
+    "@remix-run/react": "2.9.2",
+    "@remix-run/serve": "2.9.2",
     "bcryptjs": "^2.4.3",
     "isbot": "^3.7.0",
     "react": "^18.2.0",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
-    "@remix-run/dev": "^2.4.0",
+    "@remix-run/dev": "2.9.2",
     "@tailwindcss/forms": "^0.5.7",
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/jest-dom": "^6.1.4",
@@ -85,7 +85,7 @@
     "vitest": "^0.34.6"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "prisma": {
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"

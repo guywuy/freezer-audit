@@ -71,7 +71,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const session = await getSession(request.headers.get("Cookie"));
 
-  session.flash("globalMessage", `${title} added!`);
+  session.flash("globalMessage", {
+    type: "SUCCESS",
+    message: `${title} added!`,
+  });
 
   return redirect(`/items#${nameToSlug(category)}`, {
     headers: {

@@ -8,11 +8,15 @@ import invariant from "tiny-invariant";
 import type { User } from "~/models/user.server";
 import { getUserById } from "~/models/user.server";
 
+import { MessageVariant } from "./types";
+
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
 interface SessionFlashData {
-  error?: string;
-  globalMessage?: string;
+  globalMessage?: {
+    type: MessageVariant;
+    message: string;
+  };
 }
 
 export const { getSession, commitSession, destroySession } =
@@ -29,11 +33,6 @@ export const { getSession, commitSession, destroySession } =
   });
 
 const USER_SESSION_KEY = "userId";
-
-// export async function getSession(request: Request) {
-//   const cookie = request.headers.get("Cookie");
-//   return sessionStorage.getSession(cookie);
-// }
 
 export async function getUserId(
   request: Request,

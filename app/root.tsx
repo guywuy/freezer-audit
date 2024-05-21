@@ -10,11 +10,11 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 import { commitSession, getSession, getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
-
-import { FlashMessage } from "./components/FlashMessage";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -23,10 +23,10 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getSession(request.headers.get("Cookie"));
-  const message = session.get("globalMessage") || null;
+  const flash = session.get("globalMessage") || null;
 
   return json(
-    { user: await getUser(request), message },
+    { user: await getUser(request), flash },
     {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -36,7 +36,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function App() {
-  const { message } = useLoaderData<typeof loader>();
+  const { flash } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    if (flash) {
+      if (flash.type === "SUCCESS") {
+        toast.success(flash.message, {
+          position: "top-left",
+          icon: flash.message === "Deleted!" ? "💀" : undefined,
+        });
+      }
+      if (flash.type === "ERROR") {
+        toast.error(flash.message, {
+          position: "top-left",
+        });
+      }
+    }
+  }, [flash]);
 
   return (
     <html lang="en" className="h-full">
@@ -68,7 +84,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full max-w-4xl mx-auto bg-gray-50 scroll-pt-20 scroll-mt-20 scroll-smooth">
-        {message ? <FlashMessage text={message} variant="SUCCESS" /> : null}
+        <Toaster />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

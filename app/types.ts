@@ -13,3 +13,5 @@ export interface CategoryInfo {
   bgColourClass?: string;
   borderColourClass?: string;
 }
+
+export type MessageVariant = "ERROR" | "SUCCESS";

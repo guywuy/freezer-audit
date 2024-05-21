@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
 import { cloneItem } from "~/models/item.server";
-import { requireUserId } from "~/session.server";
+import { commitSession, getSession, requireUserId } from "~/session.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -12,7 +12,18 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   await cloneItem({ id: params.itemId, userId });
 
-  return redirect(`/items`);
+  const session = await getSession(request.headers.get("Cookie"));
+
+  session.flash("globalMessage", {
+    type: "SUCCESS",
+    message: `Cloned!`,
+  });
+
+  return redirect(`/items`, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export const loader = async () => {

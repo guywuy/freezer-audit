@@ -12,7 +12,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   await deleteItem({ id: params.itemId, userId });
 
-  session.flash("globalMessage", `Deleted!`);
+  session.flash("globalMessage", {
+    type: "SUCCESS",
+    message: `Deleted!`,
+  });
 
   return redirect("/items", {
     headers: {

@@ -6,7 +6,7 @@
 # Learn more: https://community.fly.io/t/sqlite-not-getting-setup-properly/4386
 
 # allocate swap space
-fallocate -l 512M /swapfile
+fallocate -l 1024M /swapfile
 chmod 0600 /swapfile
 mkswap /swapfile
 echo 10 > /proc/sys/vm/swappiness

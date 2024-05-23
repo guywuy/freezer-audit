@@ -43,6 +43,7 @@ export default function App() {
       if (flash.type === "SUCCESS") {
         toast.success(flash.message, {
           position: "top-left",
+          style: { border: "2px solid #0057c6" },
           icon: flash.message === "Deleted!" ? "💀" : undefined,
         });
       }

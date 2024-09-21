@@ -23,10 +23,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const amount = formData.get("amount");
   const location = formData.get("location");
   const category = formData.get("category");
+  const notes = formData.get("notes");
 
   const errors = {
     title: null,
     amount: null,
+    notes: null,
     location: null,
     category: null,
   };
@@ -59,11 +61,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
+  if (typeof notes !== "string") {
+    return json(
+      { errors: { ...errors, notes: "Notes should be text" } },
+      { status: 400 },
+    );
+  }
+
   await createItem({
     userId,
     title,
     amount,
-    notes: "",
+    notes,
     location,
     category,
     needsMore: false,
@@ -137,6 +146,17 @@ export default function NewItemPage() {
         {actionData?.errors?.amount ? (
           <div className="pt-1 text-red-700" id="amount-error">
             {actionData.errors.amount}
+          </div>
+        ) : null}
+      </div>
+      <div>
+        <label className="flex w-full flex-col gap-1">
+          <span>Notes: </span>
+          <input name="notes" defaultValue={""} className="flex-1 rounded" />
+        </label>
+        {actionData?.errors?.notes ? (
+          <div className="pt-1 text-red-700" id="notes-error">
+            {actionData.errors.notes}
           </div>
         ) : null}
       </div>

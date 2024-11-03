@@ -57,6 +57,7 @@ export default function LocationsPage() {
                 <Link
                   to="new"
                   className="rounded text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-gradient-to-bl from-green-100 to-green-50 mt-6"
+                  id="new"
                 >
                   + New Location
                 </Link>

@@ -74,10 +74,14 @@ export function useUser(): User {
 // export function validateEmail(email: unknown): email is string {
 //   return typeof email === "string" && email.length > 3 && email.includes("@");
 
-const validUsers = ['dontworry', 'ackworth'];
+const validUsers = ["dontworry", "ackworth"];
 
 export function validateUsername(username: unknown): username is string {
-  return typeof username === "string" && username.length > 3 && validUsers.includes(username);
+  return (
+    typeof username === "string" &&
+    username.length > 3 &&
+    (validUsers.includes(username) || username.startsWith("test"))
+  );
 }
 
-export const nameToSlug = (name: string) => name.replaceAll(' ', '');
+export const nameToSlug = (name: string) => name.replaceAll(" ", "");

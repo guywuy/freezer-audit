@@ -8,7 +8,6 @@ export type CategoryName =
 
 export interface CategoryInfo {
   name: CategoryName;
-  slug: string;
   emoji?: string;
   bgColourClass?: string;
   borderColourClass?: string;

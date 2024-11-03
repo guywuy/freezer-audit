@@ -26,7 +26,10 @@ export default function ItemsPage() {
 
   const outOfStock = data.itemListItems.filter((item) => item.needsMore);
   const inStock = data.itemListItems.filter((item) => !item.needsMore);
+
+  // Transform all of our items into an object of '{category -> items}'
   const categoryList = inStock
+    // Filter by location if required
     .filter((item) => (locFilter ? item.location === locFilter : item))
     .reduce(
       (catOb, item) => {

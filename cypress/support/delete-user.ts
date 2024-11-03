@@ -1,6 +1,6 @@
 // Use this to delete a user by their username
 // Simply call this with:
-// npx ts-node -r tsconfig-paths/register ./cypress/support/delete-user.ts username@example.com,
+// npx ts-node -r tsconfig-paths/register ./cypress/support/delete-user.ts testlorem,
 // and that user will get deleted
 
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";

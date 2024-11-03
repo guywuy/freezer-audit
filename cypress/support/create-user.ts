@@ -1,6 +1,6 @@
 // Use this to create a new user and login with that user
 // Simply call this with:
-// npx ts-node -r tsconfig-paths/register ./cypress/support/create-user.ts username@example.com,
+// npx ts-node -r tsconfig-paths/register ./cypress/support/create-user.ts lorem,
 // and it will log out the cookie value you can use to interact with the server
 // as that new user.
 
@@ -12,15 +12,12 @@ import { createUserSession } from "~/session.server";
 
 installGlobals();
 
-async function createAndLogin(email: string) {
-  if (!email) {
-    throw new Error("email required for login");
-  }
-  if (!email.endsWith("@example.com")) {
-    throw new Error("All test emails must end in @example.com");
+async function createAndLogin(username: string) {
+  if (!username) {
+    throw new Error("username required for login");
   }
 
-  const user = await createUser(email, "myreallystrongpassword");
+  const user = await createUser(username, "myreallystrongpassword");
 
   const response = await createUserSession({
     request: new Request("test://test"),

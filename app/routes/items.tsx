@@ -81,7 +81,7 @@ export default function ItemsPage() {
   };
   const exportToCsv = () => {
     // Headers for each column
-    const headers = ["Title,Amount,Location,Category,OutOfStock"];
+    const headers = ["Title,Amount,Location,Notes,Category,OutOfStock"];
 
     // Convert items data to a csv
     const itemsCSV = data.itemListItems

@@ -151,6 +151,28 @@ export default function NewItemPage() {
       </div>
       <div>
         <label className="flex w-full flex-col gap-1">
+          <span>Category: </span>
+          <select
+            name="category"
+            className="flex-1 rounded"
+            aria-invalid={actionData?.errors?.category ? true : undefined}
+            aria-errormessage={
+              actionData?.errors?.category ? "category-error" : undefined
+            }
+          >
+            {categoryNames.map((c) => (
+              <option value={c} label={c} key={c} />
+            ))}
+          </select>
+        </label>
+        {actionData?.errors?.category ? (
+          <div className="pt-1 text-red-700" id="category-error">
+            {actionData.errors.category}
+          </div>
+        ) : null}
+      </div>
+      <div>
+        <label className="flex w-full flex-col gap-1">
           <span>Notes: </span>
           <input name="notes" defaultValue={""} className="flex-1 rounded" />
         </label>
@@ -184,28 +206,6 @@ export default function NewItemPage() {
             )}
           </select>
         </label>
-      </div>
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Category: </span>
-          <select
-            name="category"
-            className="flex-1 rounded"
-            aria-invalid={actionData?.errors?.category ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.category ? "category-error" : undefined
-            }
-          >
-            {categoryNames.map((c) => (
-              <option value={c} label={c} key={c} />
-            ))}
-          </select>
-        </label>
-        {actionData?.errors?.category ? (
-          <div className="pt-1 text-red-700" id="category-error">
-            {actionData.errors.category}
-          </div>
-        ) : null}
       </div>
 
       <div className="text-right mt-8">

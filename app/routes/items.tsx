@@ -2,7 +2,7 @@ import { Item } from "@prisma/client";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getItemListItems } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
@@ -23,6 +23,29 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function ItemsPage() {
   const data = useLoaderData<typeof loader>();
   const [locFilter, setLocFilter] = useState<string | null>(null);
+  const [backupRecommended, setBackupRecommended] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Check localStorage for 'lastExport'
+    const lastExport = window.localStorage.getItem("lastExport");
+    // If doesn't exist, set it to today
+    if (!lastExport) {
+      window.localStorage.setItem("lastExport", `${new Date().toISOString()}`);
+    }
+    // If it does exist, check the date and the difference between today
+    if (lastExport) {
+      const then = new Date(lastExport).getTime();
+      const now = new Date().getTime();
+
+      const diff = Math.abs(now - then);
+      const diffInDays = diff * 1000 * 60 * 60 * 24;
+
+      // If diff is > 30 days, show Backup banner
+      if (diffInDays > 30) {
+        setBackupRecommended(true);
+      }
+    }
+  }, []);
 
   const outOfStock = data.itemListItems.filter((item) => item.needsMore);
   const inStock = data.itemListItems.filter((item) => !item.needsMore);
@@ -252,6 +275,12 @@ export default function ItemsPage() {
               </Link>
             ))}
           </ol>
+
+          {backupRecommended ? (
+            <section className="my-12">
+              Last backup was more than 30 days ago... Backup to a CSV file now?
+            </section>
+          ) : null}
 
           {categoryKeys.length === 0 ? (
             <p className="p-4">

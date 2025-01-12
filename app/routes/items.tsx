@@ -88,12 +88,13 @@ export default function ItemsPage() {
       .sort((a, b) => (a.category > b.category ? -1 : 1))
       .sort((a) => (a.needsMore ? 1 : -1))
       .reduce((acc, item) => {
-        const { title, amount, location, category, needsMore } = item;
+        const { title, amount, location, category, notes, needsMore } = item;
         acc.push(
           [
             title.replace(/,/g, ""),
             amount.replace(/,/g, ""),
             location.replace(/,/g, ""),
+            notes.replace(/,/g, ""),
             category,
             needsMore ? "Yes" : "No",
           ].join(","),

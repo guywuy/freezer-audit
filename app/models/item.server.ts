@@ -43,6 +43,7 @@ export function getItemListItems({ userId }: { userId: User["id"] }) {
       amount: true,
       location: true,
       category: true,
+      notes: true,
       needsMore: true,
     },
     orderBy: { updatedAt: "desc" },

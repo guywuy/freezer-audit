@@ -38,7 +38,8 @@ export default function ItemsPage() {
       const now = new Date().getTime();
 
       const diff = Math.abs(now - then);
-      const diffInDays = diff * 1000 * 60 * 60 * 24;
+      const millisecondsInDay = (1000 * 60 * 60 * 24);
+      const diffInDays = diff / millisecondsInDay;
 
       // If diff is > 30 days, show Backup banner
       if (diffInDays > 30) {

@@ -8,7 +8,7 @@ import { getItemListItems } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryInfos } from "~/shared";
-import { nameToSlug } from "~/utils";
+import { downloadFile, nameToSlug } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
 
@@ -25,12 +25,15 @@ export default function ItemsPage() {
   const [locFilter, setLocFilter] = useState<string | null>(null);
   const [backupRecommended, setBackupRecommended] = useState<boolean>(false);
 
+  const setLastExportedToNow = () =>
+    window.localStorage.setItem("lastExport", `${new Date().toISOString()}`);
+
   useEffect(() => {
     // Check localStorage for 'lastExport'
     const lastExport = window.localStorage.getItem("lastExport");
     // If doesn't exist, set it to today
     if (!lastExport) {
-      window.localStorage.setItem("lastExport", `${new Date().toISOString()}`);
+      setLastExportedToNow();
     }
     // If it does exist, check the date and the difference between today
     if (lastExport) {
@@ -38,7 +41,7 @@ export default function ItemsPage() {
       const now = new Date().getTime();
 
       const diff = Math.abs(now - then);
-      const millisecondsInDay = (1000 * 60 * 60 * 24);
+      const millisecondsInDay = 1000 * 60 * 60 * 24;
       const diffInDays = diff / millisecondsInDay;
 
       // If diff is > 30 days, show Backup banner
@@ -81,28 +84,6 @@ export default function ItemsPage() {
     (cat) => categoryList[cat.name],
   );
 
-  const downloadFile = ({
-    data,
-    fileName,
-    fileType,
-  }: {
-    data: string;
-    fileName: string;
-    fileType: string;
-  }) => {
-    const blob = new Blob([data], { type: fileType });
-
-    const a = document.createElement("a");
-    a.download = fileName;
-    a.href = window.URL.createObjectURL(blob);
-    const clickEvt = new MouseEvent("click", {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-    });
-    a.dispatchEvent(clickEvt);
-    a.remove();
-  };
   const exportToCsv = () => {
     // Headers for each column
     const headers = ["Title,Amount,Location,Notes,Category,OutOfStock"];
@@ -133,6 +114,9 @@ export default function ItemsPage() {
         .substring(0, 10)}.csv`,
       fileType: "text/csv",
     });
+
+    setBackupRecommended(false);
+    setLastExportedToNow();
   };
 
   return (
@@ -162,10 +146,7 @@ export default function ItemsPage() {
               </li>
               <li className="mt-auto">
                 <Form action="/logout" method="post">
-                  <button
-                    type="submit"
-                    className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
-                  >
+                  <button type="submit" className="btn btn--grey">
                     Logout
                   </button>
                 </Form>
@@ -278,8 +259,30 @@ export default function ItemsPage() {
           </ol>
 
           {backupRecommended ? (
-            <section className="my-12">
-              Last backup was more than 30 days ago... Backup to a CSV file now?
+            <section className="mt-3 p-2">
+              <div className="rounded border-yellow-700 ring-2 ring-green-500 border-2 bg-yellow-50 px-3 py-8">
+                <p className="mb-4 text-sm">
+                  The list of items was backed up more than 30 days ago...{" "}
+                  <br /> <strong>Backup to a CSV file now?</strong>
+                </p>
+                <div className="flex items-center justify-between gap-3">
+                  <button
+                    className="btn btn--grey"
+                    onClick={() => {
+                      setBackupRecommended(false);
+                      setLastExportedToNow();
+                    }}
+                  >
+                    Dismiss
+                  </button>
+                  <button
+                    className="btn flex-1 text-center"
+                    onClick={exportToCsv}
+                  >
+                    Export backup
+                  </button>
+                </div>
+              </div>
             </section>
           ) : null}
 

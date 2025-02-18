@@ -92,7 +92,7 @@ module.exports = {
     {
       files: ["**/*.md"],
       plugins: ["markdown"],
-      extends: ["plugin:markdown/recommended", "prettier"],
+      extends: ["plugin:markdown/recommended-legacy", "prettier"],
     },
 
     // Jest/Vitest
@@ -110,9 +110,9 @@ module.exports = {
       },
       settings: {
         jest: {
-          // we're using vitest which has a very similar API to jest
-          // (so the linting plugins work nicely), but it means we have to explicitly
-          // set the jest version.
+          // We're using vitest which has a very similar API to jest
+          // (so the linting plugins work nicely), but it means we
+          // have to set the jest version explicitly.
           version: 28,
         },
       },

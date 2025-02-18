@@ -291,16 +291,16 @@ async function seed() {
       category: "Meat Meal",
       userId: user.id,
     },
-  }),
-    await prisma.item.create({
-      data: {
-        title: "Thai chicken stew/broth",
-        amount: "2 portions",
-        location: "Cellar",
-        category: "Meat Meal",
-        userId: user.id,
-      },
-    });
+  });
+  await prisma.item.create({
+    data: {
+      title: "Thai chicken stew/broth",
+      amount: "2 portions",
+      location: "Cellar",
+      category: "Meat Meal",
+      userId: user.id,
+    },
+  });
 
   // Veg meals
   await prisma.item.create({

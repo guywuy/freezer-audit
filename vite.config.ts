@@ -9,7 +9,15 @@ installGlobals();
 export default defineConfig({
   server: { port: 3000 },
   plugins: [
-    remix({ ignoredRouteFiles: ["**/.*", "**/*.test.{ts,tsx}"] }),
+    remix({ ignoredRouteFiles: ["**/.*", "**/*.test.{ts,tsx}"],
+      future: {
+        v3_fetcherPersist: true,
+        v3_relativeSplatPath: true,
+        v3_lazyRouteDiscovery: true,
+        v3_singleFetch: true,
+        v3_throwAbortReason: true,
+      },
+     }),
     tsconfigPaths(),
     tailwindcss(),
   ],

@@ -7,7 +7,7 @@ export default defineConfig([
       sourceType: "script",
 
       parserOptions: {
-        tsconfigRootDir: "/Users/guysmith/projects/freezer-audit/cypress",
+        tsconfigRootDir: ".",
         project: "./tsconfig.json",
       },
     },

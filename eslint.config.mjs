@@ -1,4 +1,4 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import react from "eslint-plugin-react";
@@ -29,21 +29,15 @@ export default defineConfig([
     extends: compat.extends("eslint:recommended"),
 
     languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.commonjs,
-      },
+      globals: { ...globals.browser, ...globals.commonjs },
 
       ecmaVersion: "latest",
       sourceType: "module",
 
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
+      parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  globalIgnores(["./public/build/", "./build"]),
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
 
@@ -63,31 +57,18 @@ export default defineConfig([
     },
 
     settings: {
-      react: {
-        version: "detect",
-      },
+      react: { version: "detect" },
 
       formComponents: ["Form"],
 
       linkComponents: [
-        {
-          name: "Link",
-          linkAttribute: "to",
-        },
-        {
-          name: "NavLink",
-          linkAttribute: "to",
-        },
+        { name: "Link", linkAttribute: "to" },
+        { name: "NavLink", linkAttribute: "to" },
       ],
     },
 
     rules: {
-      "react/jsx-no-leaked-render": [
-        "warn",
-        {
-          validStrategies: ["ternary"],
-        },
-      ],
+      "react/jsx-no-leaked-render": ["warn", { validStrategies: ["ternary"] }],
     },
   },
   {
@@ -108,21 +89,15 @@ export default defineConfig([
       import: fixupPluginRules(_import),
     },
 
-    languageOptions: {
-      parser: tsParser,
-    },
+    languageOptions: { parser: tsParser },
 
     settings: {
       "import/internal-regex": "^~/",
 
       "import/resolver": {
-        node: {
-          extensions: [".ts", ".tsx"],
-        },
+        node: { extensions: [".ts", ".tsx"] },
 
-        typescript: {
-          alwaysTryTypes: true,
-        },
+        typescript: { alwaysTryTypes: true },
       },
     },
 
@@ -130,10 +105,7 @@ export default defineConfig([
       "import/order": [
         "error",
         {
-          alphabetize: {
-            caseInsensitive: true,
-            order: "asc",
-          },
+          alphabetize: { caseInsensitive: true, order: "asc" },
 
           groups: ["builtin", "external", "internal", "parent", "sibling"],
           "newlines-between": "always",
@@ -145,9 +117,7 @@ export default defineConfig([
     files: ["**/*.md"],
     extends: compat.extends("plugin:markdown/recommended-legacy", "prettier"),
 
-    plugins: {
-      markdown,
-    },
+    plugins: { markdown },
   },
   {
     files: ["**/*.test.{js,jsx,ts,tsx}"],
@@ -159,39 +129,21 @@ export default defineConfig([
       "prettier",
     ),
 
-    plugins: {
-      jest,
-      "jest-dom": jestDom,
-      "testing-library": testingLibrary,
-    },
+    plugins: { jest, "jest-dom": jestDom, "testing-library": testingLibrary },
 
-    languageOptions: {
-      globals: {
-        ...jest.environments.globals.globals,
-      },
-    },
+    languageOptions: { globals: { ...jest.environments.globals.globals } },
 
-    settings: {
-      jest: {
-        version: 28,
-      },
-    },
+    settings: { jest: { version: 28 } },
   },
   {
     files: ["cypress/**/*.ts"],
     extends: compat.extends("plugin:cypress/recommended", "prettier"),
 
-    plugins: {
-      cypress,
-    },
+    plugins: { cypress },
   },
   {
     files: ["**/.eslintrc.js", "mocks/**/*.js"],
 
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
+    languageOptions: { globals: { ...globals.node } },
   },
 ]);

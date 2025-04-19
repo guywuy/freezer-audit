@@ -1,9 +1,7 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -14,11 +12,10 @@ import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 import { commitSession, getSession, getUser } from "~/session.server";
-import stylesheet from "~/tailwind.css";
+import stylesheet from "~/tailwind.css?url";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -27,11 +24,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return json(
     { user: await getUser(request), flash },
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    },
+    { headers: { "Set-Cookie": await commitSession(session) } },
   );
 };
 
@@ -48,9 +41,7 @@ export default function App() {
         });
       }
       if (flash.type === "ERROR") {
-        toast.error(flash.message, {
-          position: "top-left",
-        });
+        toast.error(flash.message, { position: "top-left" });
       }
     }
   }, [flash]);
@@ -89,7 +80,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );

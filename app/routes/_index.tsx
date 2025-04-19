@@ -11,7 +11,7 @@ export default function Index() {
     <main className="relative min-h-screen bg-white grid place-items-center">
       {/* <Link
         to="/join"
-        className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-sm hover:bg-yellow-50 sm:px-8"
+        className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-xs hover:bg-yellow-50 sm:px-8"
       >
         Sign up
       </Link> */}

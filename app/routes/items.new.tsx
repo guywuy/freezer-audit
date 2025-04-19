@@ -114,7 +114,7 @@ export default function NewItemPage() {
             // ref={titleRef}
             name="title"
             required
-            className="flex-1 rounded"
+            className="flex-1 rounded-sm"
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             aria-invalid={actionData?.errors?.title ? true : undefined}
@@ -136,7 +136,7 @@ export default function NewItemPage() {
             // ref={amountRef}
             name="amount"
             required
-            className="flex-1 rounded"
+            className="flex-1 rounded-sm"
             aria-invalid={actionData?.errors?.amount ? true : undefined}
             aria-errormessage={
               actionData?.errors?.amount ? "amount-error" : undefined
@@ -154,7 +154,7 @@ export default function NewItemPage() {
           <span>Category: </span>
           <select
             name="category"
-            className="flex-1 rounded"
+            className="flex-1 rounded-sm"
             aria-invalid={actionData?.errors?.category ? true : undefined}
             aria-errormessage={
               actionData?.errors?.category ? "category-error" : undefined
@@ -174,7 +174,7 @@ export default function NewItemPage() {
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Notes: </span>
-          <input name="notes" defaultValue={""} className="flex-1 rounded" />
+          <input name="notes" defaultValue={""} className="flex-1 rounded-sm" />
         </label>
         {actionData?.errors?.notes ? (
           <div className="pt-1 text-red-700" id="notes-error">
@@ -188,7 +188,7 @@ export default function NewItemPage() {
           <select
             name="location"
             required
-            className="flex-1 rounded"
+            className="flex-1 rounded-sm"
             aria-invalid={actionData?.errors?.location ? true : undefined}
             aria-errormessage={
               actionData?.errors?.location ? "location-error" : undefined

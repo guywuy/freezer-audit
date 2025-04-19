@@ -109,14 +109,14 @@ export default function ItemDetailsPage() {
           <div className="flex justify-end gap-4">
             <Form method="post" action={`/items/${item.id}/needsmore`}>
               <input type="hidden" value="false" name="needsmore" />
-              <button type="submit" className="btn !bg-green-800">
+              <button type="submit" className="btn bg-green-800!">
                 We have it again!
               </button>
             </Form>
 
             <button
               onClick={() => setShowDelete(!showDelete)}
-              className={`btn ${!showDelete && "!bg-red-800"}`}
+              className={`btn ${!showDelete && "bg-red-800!"}`}
             >
               {showDelete ? "Cancel" : "Delete"}
             </button>
@@ -138,7 +138,7 @@ export default function ItemDetailsPage() {
               <input
                 name="title"
                 required
-                className="flex-1 rounded"
+                className="flex-1 rounded-sm"
                 defaultValue={item.title}
                 // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
@@ -160,7 +160,7 @@ export default function ItemDetailsPage() {
               <input
                 name="amount"
                 required
-                className="flex-1 rounded"
+                className="flex-1 rounded-sm"
                 defaultValue={item.amount}
                 aria-invalid={actionData?.errors?.amount ? true : undefined}
                 aria-errormessage={
@@ -179,7 +179,7 @@ export default function ItemDetailsPage() {
               <span>Notes: </span>
               <input
                 name="notes"
-                className="flex-1 rounded"
+                className="flex-1 rounded-sm"
                 defaultValue={item.notes || ""}
                 aria-invalid={actionData?.errors?.notes ? true : undefined}
                 aria-errormessage={
@@ -199,7 +199,7 @@ export default function ItemDetailsPage() {
               <select
                 name="location"
                 required
-                className="flex-1 rounded"
+                className="flex-1 rounded-sm"
                 defaultValue={item.location}
                 aria-invalid={actionData?.errors?.location ? true : undefined}
                 aria-errormessage={
@@ -228,7 +228,7 @@ export default function ItemDetailsPage() {
               <span>Category: </span>
               <select
                 name="category"
-                className="flex-1 rounded"
+                className="flex-1 rounded-sm"
                 defaultValue={item.category}
                 aria-invalid={actionData?.errors?.category ? true : undefined}
                 aria-errormessage={
@@ -280,12 +280,12 @@ export default function ItemDetailsPage() {
           <div className="flex justify-end gap-2 mb-3 mt-8">
             <button
               onClick={() => setShowDelete(!showDelete)}
-              className={`btn ml-auto ${!showDelete && "!bg-red-800"}`}
+              className={`btn ml-auto ${!showDelete && "bg-red-800!"}`}
             >
               {showDelete ? "Cancel" : "Delete"}
             </button>
             <Form method="post" action={`/items/${item.id}/clone`}>
-              <button type="submit" className="btn !bg-amber-500">
+              <button type="submit" className="btn bg-amber-500!">
                 Clone item
               </button>
             </Form>
@@ -296,7 +296,7 @@ export default function ItemDetailsPage() {
           <div className="flex mb-2 mt-2">
             <Form method="post" action={`/items/${item.id}/needsmore`}>
               <input type="hidden" value="true" name="needsmore" />
-              <button type="submit" className="btn !bg-fuchsia-800">
+              <button type="submit" className="btn bg-fuchsia-800!">
                 We need to buy more
               </button>
             </Form>
@@ -307,7 +307,7 @@ export default function ItemDetailsPage() {
         <div className="flex justify-end items-center gap-6 mt-6">
           <p className="font-bold text-lg">Are you sure?!</p>
           <Form method="post" action={`/items/${item.id}/delete`}>
-            <button type="submit" className="btn !bg-red-800">
+            <button type="submit" className="btn bg-red-800!">
               Yes, delete
             </button>
           </Form>

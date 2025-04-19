@@ -101,7 +101,7 @@ export default function LoginPage() {
                 placeholder="d***w****"
                 aria-invalid={actionData?.errors?.username ? true : undefined}
                 aria-describedby="username-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full rounded-sm border border-gray-500 px-2 py-1 text-lg"
               />
               {actionData?.errors?.username ? (
                 <div className="pt-1 text-red-700" id="username-error">
@@ -128,7 +128,7 @@ export default function LoginPage() {
                 placeholder="c******c****"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full rounded-sm border border-gray-500 px-2 py-1 text-lg"
               />
               {actionData?.errors?.password ? (
                 <div className="pt-1 text-red-700" id="password-error">
@@ -151,7 +151,7 @@ export default function LoginPage() {
                 id="remember"
                 name="remember"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded-sm border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label
                 htmlFor="remember"

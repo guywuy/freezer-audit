@@ -19,13 +19,13 @@ export default function LocationsPage() {
       <header className="flex items-center justify-between p-4 pl-2 text-white">
         <Link
           to="/items"
-          className="rounded bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
+          className="rounded-sm bg-slate-600 px-4 py-2 text-gray-50 hover:bg-blue-500 active:bg-blue-600"
         >
           Back to items
         </Link>
         <Link
           to="new"
-          className="rounded text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-gradient-to-bl from-green-100 to-green-50"
+          className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50"
         >
           + New Location
         </Link>
@@ -45,7 +45,7 @@ export default function LocationsPage() {
                     method="post"
                     action={`/locations/${location.id}/delete`}
                   >
-                    <button type="submit" className="text-sm btn !bg-red-800">
+                    <button type="submit" className="text-sm btn bg-red-800!">
                       Delete
                     </button>
                   </Form>
@@ -56,7 +56,7 @@ export default function LocationsPage() {
                 No locations yet.
                 <Link
                   to="new"
-                  className="rounded text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-gradient-to-bl from-green-100 to-green-50 mt-6"
+                  className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50 mt-6"
                   id="new"
                 >
                   + New Location

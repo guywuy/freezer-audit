@@ -157,7 +157,7 @@ export default function ItemsPage() {
 
         <Link
           to="new"
-          className="rounded text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-gradient-to-bl from-green-100 to-green-50"
+          className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50"
         >
           + New Item
         </Link>
@@ -260,7 +260,7 @@ export default function ItemsPage() {
 
           {backupRecommended ? (
             <section className="mt-3 p-2">
-              <div className="rounded border-yellow-700 ring-2 ring-green-500 border-2 bg-yellow-50 px-3 py-8">
+              <div className="rounded-sm border-yellow-700 ring-2 ring-green-500 border-2 bg-yellow-50 px-3 py-8">
                 <p className="mb-4 text-sm">
                   The list of items was backed up more than 30 days ago...{" "}
                   <br /> <strong>Backup to a CSV file now?</strong>
@@ -316,7 +316,7 @@ export default function ItemsPage() {
                       <li
                         key={item.id}
                         id={item.id}
-                        className="last:pb-10 bg-gradient-to-tr from-white to-gray-50"
+                        className="last:pb-10 bg-linear-to-tr from-white to-gray-50"
                       >
                         <NavLink
                           className={({ isActive }) =>

@@ -52,7 +52,7 @@ export default function NewLocationPage() {
             // ref={titleRef}
             name="title"
             required
-            className="flex-1 rounded"
+            className="flex-1 rounded-sm"
             placeholder="e.g. Chest"
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus

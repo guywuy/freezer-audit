@@ -19,158 +19,179 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
-export default defineConfig([{
+export default defineConfig([
+  {
     extends: compat.extends("eslint:recommended"),
 
     languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.commonjs,
-        },
+      globals: {
+        ...globals.browser,
+        ...globals.commonjs,
+      },
 
-        ecmaVersion: "latest",
-        sourceType: "module",
+      ecmaVersion: "latest",
+      sourceType: "module",
 
-        parserOptions: {
-            ecmaFeatures: {
-                jsx: true,
-            },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+      },
     },
-}, {
+  },
+  {
     files: ["**/*.{js,jsx,ts,tsx}"],
 
-    extends: fixupConfigRules(compat.extends(
+    extends: fixupConfigRules(
+      compat.extends(
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
         "prettier",
-    )),
+      ),
+    ),
 
     plugins: {
-        react: fixupPluginRules(react),
-        "jsx-a11y": fixupPluginRules(jsxA11Y),
+      react: fixupPluginRules(react),
+      "jsx-a11y": fixupPluginRules(jsxA11Y),
     },
 
     settings: {
-        react: {
-            version: "detect",
+      react: {
+        version: "detect",
+      },
+
+      formComponents: ["Form"],
+
+      linkComponents: [
+        {
+          name: "Link",
+          linkAttribute: "to",
         },
-
-        formComponents: ["Form"],
-
-        linkComponents: [{
-            name: "Link",
-            linkAttribute: "to",
-        }, {
-            name: "NavLink",
-            linkAttribute: "to",
-        }],
+        {
+          name: "NavLink",
+          linkAttribute: "to",
+        },
+      ],
     },
 
     rules: {
-        "react/jsx-no-leaked-render": ["warn", {
-            validStrategies: ["ternary"],
-        }],
+      "react/jsx-no-leaked-render": [
+        "warn",
+        {
+          validStrategies: ["ternary"],
+        },
+      ],
     },
-}, {
+  },
+  {
     files: ["**/*.{ts,tsx}"],
 
-    extends: fixupConfigRules(compat.extends(
+    extends: fixupConfigRules(
+      compat.extends(
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/stylistic",
         "plugin:import/recommended",
         "plugin:import/typescript",
         "prettier",
-    )),
+      ),
+    ),
 
     plugins: {
-        "@typescript-eslint": fixupPluginRules(typescriptEslint),
-        import: fixupPluginRules(_import),
+      "@typescript-eslint": fixupPluginRules(typescriptEslint),
+      import: fixupPluginRules(_import),
     },
 
     languageOptions: {
-        parser: tsParser,
+      parser: tsParser,
     },
 
     settings: {
-        "import/internal-regex": "^~/",
+      "import/internal-regex": "^~/",
 
-        "import/resolver": {
-            node: {
-                extensions: [".ts", ".tsx"],
-            },
-
-            typescript: {
-                alwaysTryTypes: true,
-            },
+      "import/resolver": {
+        node: {
+          extensions: [".ts", ".tsx"],
         },
+
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
     },
 
     rules: {
-        "import/order": ["error", {
-            alphabetize: {
-                caseInsensitive: true,
-                order: "asc",
-            },
+      "import/order": [
+        "error",
+        {
+          alphabetize: {
+            caseInsensitive: true,
+            order: "asc",
+          },
 
-            groups: ["builtin", "external", "internal", "parent", "sibling"],
-            "newlines-between": "always",
-        }],
+          groups: ["builtin", "external", "internal", "parent", "sibling"],
+          "newlines-between": "always",
+        },
+      ],
     },
-}, {
+  },
+  {
     files: ["**/*.md"],
     extends: compat.extends("plugin:markdown/recommended-legacy", "prettier"),
 
     plugins: {
-        markdown,
+      markdown,
     },
-}, {
+  },
+  {
     files: ["**/*.test.{js,jsx,ts,tsx}"],
 
     extends: compat.extends(
-        "plugin:jest/recommended",
-        "plugin:jest-dom/recommended",
-        "plugin:testing-library/react",
-        "prettier",
+      "plugin:jest/recommended",
+      "plugin:jest-dom/recommended",
+      "plugin:testing-library/react",
+      "prettier",
     ),
 
     plugins: {
-        jest,
-        "jest-dom": jestDom,
-        "testing-library": testingLibrary,
+      jest,
+      "jest-dom": jestDom,
+      "testing-library": testingLibrary,
     },
 
     languageOptions: {
-        globals: {
-            ...jest.environments.globals.globals,
-        },
+      globals: {
+        ...jest.environments.globals.globals,
+      },
     },
 
     settings: {
-        jest: {
-            version: 28,
-        },
+      jest: {
+        version: 28,
+      },
     },
-}, {
+  },
+  {
     files: ["cypress/**/*.ts"],
     extends: compat.extends("plugin:cypress/recommended", "prettier"),
 
     plugins: {
-        cypress,
+      cypress,
     },
-}, {
+  },
+  {
     files: ["**/.eslintrc.js", "mocks/**/*.js"],
 
     languageOptions: {
-        globals: {
-            ...globals.node,
-        },
+      globals: {
+        ...globals.node,
+      },
     },
-}]);
+  },
+]);

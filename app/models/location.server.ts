@@ -51,10 +51,7 @@ export function createLocation({
   });
 }
 
-export function updateLocation({
-  id,
-  title,
-}: LocationMutation) {
+export function updateLocation({ id, title }: LocationMutation) {
   return prisma.location.update({
     where: { id },
     data: {

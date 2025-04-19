@@ -193,10 +193,10 @@ export default function ItemsPage() {
                         {index % 4 === 0
                           ? "🥸"
                           : index % 4 === 1
-                          ? "🧐"
-                          : index % 4 === 2
-                          ? "😱"
-                          : "🤠"}
+                            ? "🧐"
+                            : index % 4 === 2
+                              ? "😱"
+                              : "🤠"}
                       </span>
                       {item.title}
                     </NavLink>

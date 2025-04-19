@@ -144,10 +144,7 @@ export default function Join() {
           </div>
 
           <input type="hidden" name="redirectTo" value={redirectTo} />
-          <button
-            type="submit"
-            className="w-full btn"
-          >
+          <button type="submit" className="w-full btn">
             Create Account
           </button>
           <div className="flex items-center justify-center">

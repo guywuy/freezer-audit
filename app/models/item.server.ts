@@ -46,7 +46,7 @@ export function getItemListItems({ userId }: { userId: User["id"] }) {
       notes: true,
       needsMore: true,
     },
-    orderBy: { updatedAt: "desc" },
+    orderBy: { createdAt: "desc" },
   });
 }
 

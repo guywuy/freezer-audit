@@ -1,27 +1,15 @@
 import { CategoryInfo, CategoryName } from "./types";
 
 export const categoryNames: CategoryName[] = [
-  "General",
   "Meat and Fish",
-  "Fruit and Veg",
   "Meat Meal",
   "Veg Meal",
+  "General",
+  "Fruit and Veg",
   "Sweet",
 ];
 
 export const categoryInfos: CategoryInfo[] = [
-  {
-    name: "General",
-    borderColourClass: "border-blue-600",
-    bgColourClass: "bg-blue-50",
-    emoji: "❄️",
-  },
-  {
-    name: "Fruit and Veg",
-    bgColourClass: "bg-green-50",
-    borderColourClass: "border-green-600",
-    emoji: "🥦",
-  },
   {
     name: "Meat and Fish",
     bgColourClass: "bg-red-50",
@@ -39,6 +27,18 @@ export const categoryInfos: CategoryInfo[] = [
     bgColourClass: "bg-teal-100",
     borderColourClass: "border-teal-600",
     emoji: "🥬",
+  },
+  {
+    name: "General",
+    borderColourClass: "border-blue-600",
+    bgColourClass: "bg-blue-50",
+    emoji: "❄️",
+  },
+  {
+    name: "Fruit and Veg",
+    bgColourClass: "bg-green-50",
+    borderColourClass: "border-green-600",
+    emoji: "🥦",
   },
   {
     name: "Sweet",

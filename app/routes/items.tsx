@@ -17,7 +17,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const itemListItems = await getItemListItems({ userId });
   const locationListItems = await getLocationListItems({ userId });
 
-  return json({ itemListItems, locationListItems });
+  return { itemListItems, locationListItems };
 };
 
 export default function ItemsPage() {

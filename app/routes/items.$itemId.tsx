@@ -15,6 +15,7 @@ import { getItem, updateItem } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
+import { formatDate } from "~/utils";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -25,7 +26,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     throw new Response("Not Found", { status: 404 });
   }
   const locationListItems = await getLocationListItems({ userId });
-  return json({ item, locationListItems, userId });
+  return { item, locationListItems, userId };
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -270,11 +271,11 @@ export default function ItemDetailsPage() {
             </li>
             <li>
               <span className="font-thin">Created at: </span>
-              {item.createdAt?.substring(0, 10)}
+              {formatDate(item.createdAt)}
             </li>
             <li>
               <span className="font-thin">Updated at: </span>
-              {item.updatedAt?.substring(0, 10)}
+              {formatDate(item.updatedAt)}
             </li>
           </ul>
           <div className="flex justify-end gap-2 mb-3 mt-8">

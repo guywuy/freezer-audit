@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import {
   Form,
   isRouteErrorResponse,
@@ -47,35 +47,35 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   };
 
   if (typeof title !== "string" || title.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, title: "Title is required" } },
       { status: 400 },
     );
   }
 
   if (typeof amount !== "string" || amount.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, amount: "Amount is required" } },
       { status: 400 },
     );
   }
 
   if (typeof notes !== "string") {
-    return json(
+    return data(
       { errors: { ...errors, location: "Notes should be text" } },
       { status: 400 },
     );
   }
 
   if (typeof location !== "string" || location.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, location: "Location is required" } },
       { status: 400 },
     );
   }
 
   if (typeof category !== "string" || category.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, category: "Category is required" } },
       { status: 400 },
     );

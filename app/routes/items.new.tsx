@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 
 import SubpageHeader from "~/components/subpageHeader";
@@ -12,7 +12,7 @@ import { nameToSlug } from "~/utils";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   const locationListItems = await getLocationListItems({ userId });
-  return json({ locationListItems });
+  return { locationListItems };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -34,35 +34,35 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   };
 
   if (typeof title !== "string" || title.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, title: "Title is required" } },
       { status: 400 },
     );
   }
 
   if (typeof amount !== "string" || amount.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, amount: "Amount is required" } },
       { status: 400 },
     );
   }
 
   if (typeof location !== "string" || location.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, location: "Location is required" } },
       { status: 400 },
     );
   }
 
   if (typeof category !== "string" || category.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, category: "Category is required" } },
       { status: 400 },
     );
   }
 
   if (typeof notes !== "string") {
-    return json(
+    return data(
       { errors: { ...errors, notes: "Notes should be text" } },
       { status: 400 },
     );

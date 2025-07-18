@@ -3,7 +3,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
@@ -14,7 +14,7 @@ import { safeRedirect, validateUsername } from "~/utils";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
-  return json({});
+  return {};
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -25,21 +25,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const remember = formData.get("remember");
 
   if (!validateUsername(username)) {
-    return json(
+    return data(
       { errors: { username: "Email is invalid", password: null } },
       { status: 400 },
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
-    return json(
+    return data(
       { errors: { username: null, password: "Password is required" } },
       { status: 400 },
     );
   }
 
   if (password.length < 8) {
-    return json(
+    return data(
       { errors: { username: null, password: "Password is too short" } },
       { status: 400 },
     );
@@ -48,7 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await verifyLogin(username, password);
 
   if (!user) {
-    return json(
+    return data(
       { errors: { username: "Invalid username or password", password: null } },
       { status: 400 },
     );

@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 
 import SubpageHeader from "~/components/subpageHeader";
@@ -17,7 +17,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   };
 
   if (typeof title !== "string" || title.length === 0) {
-    return json(
+    return data(
       { errors: { ...errors, title: "Title is required" } },
       { status: 400 },
     );

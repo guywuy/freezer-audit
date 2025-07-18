@@ -3,7 +3,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
@@ -15,7 +15,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // return redirect("/");
   const userId = await getUserId(request);
   if (userId) return redirect("/");
-  return json({});
+  return {};
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -25,21 +25,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateUsername(username)) {
-    return json(
+    return data(
       { errors: { username: "Username is invalid", password: null } },
       { status: 400 },
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
-    return json(
+    return data(
       { errors: { username: null, password: "Password is required" } },
       { status: 400 },
     );
   }
 
   if (password.length < 8) {
-    return json(
+    return data(
       { errors: { username: null, password: "Password is too short" } },
       { status: 400 },
     );
@@ -47,7 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const existingUser = await getUserByUsername(username);
   if (existingUser) {
-    return json(
+    return data(
       {
         errors: {
           username: "A user already exists with this username",

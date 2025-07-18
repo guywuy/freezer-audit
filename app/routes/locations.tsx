@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
 
 import { getLocationListItems } from "~/models/location.server";
@@ -8,7 +7,7 @@ import { requireUserId } from "~/session.server";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   const locationListItems = await getLocationListItems({ userId });
-  return json({ locationListItems });
+  return { locationListItems };
 };
 
 export default function LocationsPage() {

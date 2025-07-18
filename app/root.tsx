@@ -1,5 +1,5 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -22,7 +22,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getSession(request.headers.get("Cookie"));
   const flash = session.get("globalMessage") || null;
 
-  return json(
+  return data(
     { user: await getUser(request), flash },
     { headers: { "Set-Cookie": await commitSession(session) } },
   );

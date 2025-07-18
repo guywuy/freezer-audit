@@ -17,6 +17,7 @@ export default defineConfig({
   plugins: [
     remix({
       future: {
+        v3_relativeSplatPath: true,
         v3_singleFetch: true,
       },
       ignoredRouteFiles: ["**/.*", "**/*.test.{ts,tsx}"]

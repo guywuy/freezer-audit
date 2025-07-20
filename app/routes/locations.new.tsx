@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { data, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import type { ActionFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
+import { Form, useActionData } from "react-router";
 
 import SubpageHeader from "~/components/subpageHeader";
 import { createLocation } from "~/models/location.server";

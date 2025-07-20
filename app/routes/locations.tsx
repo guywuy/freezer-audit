@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { Form, Link, Outlet, useLoaderData } from "react-router";
 
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";

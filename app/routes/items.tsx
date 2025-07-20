@@ -1,6 +1,6 @@
 import { Item } from "@prisma/client";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
 import { useEffect, useState } from "react";
 
 import { getItemListItems } from "~/models/item.server";

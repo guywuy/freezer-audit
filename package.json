@@ -23,10 +23,12 @@
   "eslintIgnore": [
     "/node_modules",
     "/build",
-    "/public/build"
+    "/public/build",
+    "/.react-router/"
   ],
   "dependencies": {
     "@prisma/client": "^6.12.0",
+    "@react-router/fs-routes": "^7.7.0",
     "@react-router/node": "^7.0.0",
     "@react-router/serve": "^7.0.0",
     "@tailwindcss/vite": "^4.1.4",

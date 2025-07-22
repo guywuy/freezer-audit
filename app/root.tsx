@@ -1,8 +1,14 @@
-import type { LinksFunction, LoaderFunctionArgs } from "react-router";
-import { data } from "react-router";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from "react-router";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import type { LinksFunction, LoaderFunctionArgs } from "react-router";
+import { data ,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+} from "react-router";
 
 import { commitSession, getSession, getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css?url";

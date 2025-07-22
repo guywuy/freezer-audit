@@ -1,4 +1,8 @@
-import { SessionData, createCookieSessionStorage, redirect } from "react-router";
+import {
+  SessionData,
+  createCookieSessionStorage,
+  redirect,
+} from "react-router";
 import invariant from "tiny-invariant";
 
 import type { User } from "~/models/user.server";

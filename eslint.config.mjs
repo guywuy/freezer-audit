@@ -37,7 +37,7 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
-  globalIgnores(["./public/build/", "./build"]),
+  globalIgnores(["./public/build/", "./build", "./.react-router/"]),
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
 

@@ -1,7 +1,7 @@
 import { Item } from "@prisma/client";
+import { useEffect, useState } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
-import { useEffect, useState } from "react";
 
 import { getItemListItems } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";

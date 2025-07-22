@@ -1,6 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
-import { data, redirect } from "react-router";
-import { Form, useActionData } from "react-router";
+import { data, redirect, Form, useActionData } from "react-router";
 
 import SubpageHeader from "~/components/subpageHeader";
 import { createLocation } from "~/models/location.server";

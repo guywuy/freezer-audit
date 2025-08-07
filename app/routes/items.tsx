@@ -55,14 +55,16 @@ export default function ItemsPage() {
   const outOfStock = data.itemListItems.filter((item) => item.needsMore);
   const inStock = data.itemListItems.filter((item) => !item.needsMore);
 
-  // Transform all of our items into an object of '{category -> items}'
   const fuse = new Fuse(inStock, {
     keys: ["title"],
     threshold: 0.3,
   });
 
+  // Transform all of our items into an object of '{category -> items}'
   const categoryList = (
-    searchFilter ? fuse.search(searchFilter).map((result) => result.item) : inStock
+    searchFilter
+      ? fuse.search(searchFilter).map((result) => result.item)
+      : inStock
   )
     // Filter by location if required
     .filter((item) => (locFilter ? item.location === locFilter : item))
@@ -125,6 +127,11 @@ export default function ItemsPage() {
 
     setBackupRecommended(false);
     setLastExportedToNow();
+  };
+
+  const resetFilters = () => {
+    setLocFilter(null);
+    setSearchFilter(null);
   };
 
   return (
@@ -214,16 +221,17 @@ export default function ItemsPage() {
             </details>
           ) : null}
 
-          <div className="px-2 mb-4">
-            <label>
-              <span className="text-xs text-gray-600">Search by title</span>
-              <input
-                type="search"
-                placeholder="Search..."
-                className="w-full p-2 border-2 border-gray-400"
-                onChange={(e) => setSearchFilter(e.target.value)}
-              />
+          <div className="flex items-center gap-2 my-4 px-2">
+            <label htmlFor="search" className="text-xs text-gray-600">
+              Search:
             </label>
+            <input
+              type="search"
+              id="search"
+              className="input flex-1"
+              value={searchFilter || ""}
+              onChange={(e) => setSearchFilter(e.target.value)}
+            />
           </div>
 
           {locationFilterObjects.length > 1 ? (
@@ -265,18 +273,20 @@ export default function ItemsPage() {
             </div>
           ) : null}
 
-          <ol className="flex flex-wrap items-center gap-2.5 px-2">
-            <p className="text-xs text-gray-600">Jump to category:</p>
-            {usedCategoriesInOrder.map((category) => (
-              <Link
-                key={category.name}
-                to={`#${nameToSlug(category.name)}`}
-                className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
-              >
-                {category.name} &nbsp;{category.emoji}
-              </Link>
-            ))}
-          </ol>
+          {usedCategoriesInOrder.length > 0 && (
+            <ol className="flex flex-wrap items-center gap-2.5 px-2">
+              <p className="text-xs text-gray-600">Jump to category:</p>
+              {usedCategoriesInOrder.map((category) => (
+                <Link
+                  key={category.name}
+                  to={`#${nameToSlug(category.name)}`}
+                  className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
+                >
+                  {category.name} &nbsp;{category.emoji}
+                </Link>
+              ))}
+            </ol>
+          )}
 
           {backupRecommended ? (
             <section className="mt-3 p-2">
@@ -307,10 +317,19 @@ export default function ItemsPage() {
           ) : null}
 
           {categoryKeys.length === 0 ? (
-            <p className="p-4">
-              No items yet. Try adding a freezer location in the menu, then add
-              some items.
-            </p>
+            searchFilter || locFilter ? (
+              <div className="flex flex-col items-center justify-center">
+                <p className="p-4">No items found.</p>
+                <button onClick={resetFilters} className="btn">
+                  Reset filters?
+                </button>
+              </div>
+            ) : (
+              <p className="p-4">
+                No items yet. Try adding a freezer location in the menu, then
+                add some items.
+              </p>
+            )
           ) : (
             <ol className="mt-12">
               {usedCategoriesInOrder.map((category) => (

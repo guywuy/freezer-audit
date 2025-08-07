@@ -42,7 +42,6 @@
     "fuse.js": "^7.0.0"
   },
   "devDependencies": {
-    "@types/fuse.js": "^6.2.0",
     "@eslint/compat": "^1.2.8",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.25.0",

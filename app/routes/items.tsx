@@ -1,4 +1,5 @@
 import { Item } from "@prisma/client";
+import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
@@ -22,6 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function ItemsPage() {
   const data = useLoaderData<typeof loader>();
   const [locFilter, setLocFilter] = useState<string | null>(null);
+  const [searchFilter, setSearchFilter] = useState<string | null>(null);
   const [backupRecommended, setBackupRecommended] = useState<boolean>(false);
 
   const setLastExportedToNow = () =>
@@ -54,7 +56,14 @@ export default function ItemsPage() {
   const inStock = data.itemListItems.filter((item) => !item.needsMore);
 
   // Transform all of our items into an object of '{category -> items}'
-  const categoryList = inStock
+  const fuse = new Fuse(inStock, {
+    keys: ["title"],
+    threshold: 0.3,
+  });
+
+  const categoryList = (
+    searchFilter ? fuse.search(searchFilter).map((result) => result.item) : inStock
+  )
     // Filter by location if required
     .filter((item) => (locFilter ? item.location === locFilter : item))
     .reduce(
@@ -204,6 +213,18 @@ export default function ItemsPage() {
               </ul>
             </details>
           ) : null}
+
+          <div className="px-2 mb-4">
+            <label>
+              <span className="text-xs text-gray-600">Search by title</span>
+              <input
+                type="search"
+                placeholder="Search..."
+                className="w-full p-2 border-2 border-gray-400"
+                onChange={(e) => setSearchFilter(e.target.value)}
+              />
+            </label>
+          </div>
 
           {locationFilterObjects.length > 1 ? (
             <div className="flex flex-wrap items-center gap-2.5 text-sm my-2 px-2 mb-4">

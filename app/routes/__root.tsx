@@ -1,34 +1,25 @@
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import type { LinksFunction, LoaderFunctionArgs } from "react-router";
-import { data ,
-  Links,
-  Meta,
+import {
+  createRootRoute,
+  Link,
   Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-} from "react-router";
-
+} from "@tanstack/react-router";
 import { commitSession, getSession, getUser } from "~/session.server";
-import stylesheet from "~/tailwind.css?url";
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
-];
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const flash = session.get("globalMessage") || null;
-
-  return data(
-    { user: await getUser(request), flash },
-    { headers: { "Set-Cookie": await commitSession(session) } },
-  );
-};
+export const Route = createRootRoute({
+  loader: async ({ context }) => {
+    const session = await getSession(context.request.headers.get("Cookie"));
+    const flash = session.get("globalMessage") || null;
+    const user = await getUser(context.request);
+    const headers = { "Set-Cookie": await commitSession(session) };
+    return { user, flash, headers };
+  },
+  component: App,
+});
 
 export default function App() {
-  const { flash } = useLoaderData<typeof loader>();
+  const { flash } = Route.useLoaderData();
 
   useEffect(() => {
     if (flash) {
@@ -71,14 +62,11 @@ export default function App() {
           href="/apple-touch-icon.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <Meta />
-        <Links />
+        <meta name="robots" content="noindex, nofollow" />
       </head>
       <body className="h-full max-w-4xl mx-auto bg-gray-50 scroll-pt-20 scroll-mt-20 scroll-smooth">
         <Toaster />
         <Outlet />
-        <ScrollRestoration />
-        <Scripts />
       </body>
     </html>
   );

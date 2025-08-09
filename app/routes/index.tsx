@@ -1,20 +1,15 @@
-import type { MetaFunction } from "react-router";
-import { Link } from "react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { useOptionalUser } from "~/utils";
+import { useOptionalUser } from "~/use-auth";
 
-export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
+export const Route = createFileRoute("/")({
+  component: Index,
+});
 
-export default function Index() {
+function Index() {
   const user = useOptionalUser();
   return (
     <main className="relative min-h-screen bg-white grid place-items-center">
-      {/* <Link
-        to="/join"
-        className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-xs hover:bg-yellow-50 sm:px-8"
-      >
-        Sign up
-      </Link> */}
       {user ? (
         <Link
           to="/items"

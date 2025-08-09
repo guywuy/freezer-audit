@@ -1,41 +1,35 @@
-import type { ActionFunctionArgs } from "react-router";
-import { data, redirect, Form, useActionData } from "react-router";
-
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import SubpageHeader from "~/components/subpageHeader";
-import { createLocation } from "~/models/location.server";
-import { requireUserId } from "~/session.server";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const userId = await requireUserId(request);
+export const Route = createFileRoute("/locations/new")({
+  component: NewLocationPage,
+});
 
-  const formData = await request.formData();
-  const title = formData.get("title");
+function NewLocationPage() {
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState<any>({});
 
-  const errors = {
-    title: null,
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const response = await fetch("/locations/new/action", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      navigate({ to: "/locations" });
+    } else {
+      const data = await response.json();
+      setErrors(data.errors);
+    }
   };
 
-  if (typeof title !== "string" || title.length === 0) {
-    return data(
-      { errors: { ...errors, title: "Title is required" } },
-      { status: 400 },
-    );
-  }
-
-  await createLocation({
-    userId,
-    title,
-  });
-
-  return redirect(`/locations`);
-};
-
-export default function NewLocationPage() {
-  const actionData = useActionData<typeof action>();
-
   return (
-    <Form
+    <form
       method="post"
+      onSubmit={handleSubmit}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -48,22 +42,18 @@ export default function NewLocationPage() {
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>
           <input
-            // ref={titleRef}
             name="title"
             required
             className="flex-1 rounded-sm"
             placeholder="e.g. Chest"
-            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
-            aria-invalid={actionData?.errors?.title ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.title ? "title-error" : undefined
-            }
+            aria-invalid={errors?.title ? true : undefined}
+            aria-errormessage={errors?.title ? "title-error" : undefined}
           />
         </label>
-        {actionData?.errors?.title ? (
+        {errors?.title ? (
           <div className="pt-1 text-red-700" id="title-error">
-            {actionData.errors.title}
+            {errors.title}
           </div>
         ) : null}
       </div>
@@ -73,6 +63,6 @@ export default function NewLocationPage() {
           Save
         </button>
       </div>
-    </Form>
+    </form>
   );
 }

@@ -1,7 +1,10 @@
 import { Item } from "@prisma/client";
 import { useEffect, useState } from "react";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
 
 import { getItemListItems } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
@@ -9,18 +12,19 @@ import { requireUserId } from "~/session.server";
 import { categoryInfos } from "~/shared";
 import { downloadFile, nameToSlug } from "~/utils";
 
-export const meta: MetaFunction = () => [{ title: "Freezer audit" }];
+export const Route = createFileRoute("/items")({
+  loader: async ({ context }) => {
+    const userId = await requireUserId(context.request);
+    const itemListItems = await getItemListItems({ userId });
+    const locationListItems = await getLocationListItems({ userId });
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request);
-  const itemListItems = await getItemListItems({ userId });
-  const locationListItems = await getLocationListItems({ userId });
+    return { itemListItems, locationListItems };
+  },
+  component: ItemsPage,
+});
 
-  return { itemListItems, locationListItems };
-};
-
-export default function ItemsPage() {
-  const data = useLoaderData<typeof loader>();
+function ItemsPage() {
+  const data = Route.useLoaderData();
   const [locFilter, setLocFilter] = useState<string | null>(null);
   const [backupRecommended, setBackupRecommended] = useState<boolean>(false);
 
@@ -144,18 +148,24 @@ export default function ItemsPage() {
                 </button>
               </li>
               <li className="mt-auto">
-                <Form action="/logout" method="post">
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    await fetch("/logout", { method: "POST" });
+                    window.location.href = "/";
+                  }}
+                >
                   <button type="submit" className="btn btn--grey">
                     Logout
                   </button>
-                </Form>
+                </form>
               </li>
             </ul>
           </nav>
         </details>
 
         <Link
-          to="new"
+          to="/items/new"
           className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50"
         >
           + New Item
@@ -180,13 +190,10 @@ export default function ItemsPage() {
               <ul>
                 {outOfStock.map((item, index) => (
                   <li key={item.id}>
-                    <NavLink
-                      className={({ isActive }) =>
-                        `block px-2 py-3 my-1 bg-opacity-50 border-t border-slate-200 ${
-                          isActive ? "bg-fuchsia-100" : ""
-                        }`
-                      }
-                      to={item.id!}
+                    <Link
+                      className="block px-2 py-3 my-1 bg-opacity-50 border-t border-slate-200"
+                      activeProps={{ className: "bg-fuchsia-100" }}
+                      to={`/items/${item.id}`}
                     >
                       <span className="inline-flex text-xl mr-2">
                         {index % 4 === 0
@@ -198,7 +205,7 @@ export default function ItemsPage() {
                               : "🤠"}
                       </span>
                       {item.title}
-                    </NavLink>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -247,13 +254,13 @@ export default function ItemsPage() {
           <ol className="flex flex-wrap items-center gap-2.5 px-2">
             <p className="text-xs text-gray-600">Jump to category:</p>
             {usedCategoriesInOrder.map((category) => (
-              <Link
+              <a
                 key={category.name}
-                to={`#${nameToSlug(category.name)}`}
+                href={`#${nameToSlug(category.name)}`}
                 className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
               >
                 {category.name} &nbsp;{category.emoji}
-              </Link>
+              </a>
             ))}
           </ol>
 
@@ -317,13 +324,10 @@ export default function ItemsPage() {
                         id={item.id}
                         className="last:pb-10 bg-linear-to-tr from-white to-gray-50"
                       >
-                        <NavLink
-                          className={({ isActive }) =>
-                            `block p-2 py-3 text-xl bg-opacity-50 leading-tight text-balance ${
-                              isActive ? "bg-fuchsia-100" : ""
-                            }`
-                          }
-                          to={item.id!}
+                        <Link
+                          className="block p-2 py-3 text-xl bg-opacity-50 leading-tight text-balance"
+                          activeProps={{ className: "bg-fuchsia-100" }}
+                          to={`/items/${item.id}`}
                         >
                           {item.title}
                           <ul className="mt-1.5 grid grid-cols-2 gap-2 text-xs text-gray-900 font-bold">
@@ -340,7 +344,7 @@ export default function ItemsPage() {
                               {item.location}
                             </li>
                           </ul>
-                        </NavLink>
+                        </Link>
                       </li>
                     ))}
                   </ol>

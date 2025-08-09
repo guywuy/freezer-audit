@@ -1,17 +1,31 @@
-import type { LoaderFunctionArgs } from "react-router";
-import { Form, Link, Outlet, useLoaderData } from "react-router";
-
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useNavigate,
+} from "@tanstack/react-router";
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request);
-  const locationListItems = await getLocationListItems({ userId });
-  return { locationListItems };
-};
+export const Route = createFileRoute("/locations")({
+  loader: async ({ context }) => {
+    const userId = await requireUserId(context.request);
+    const locationListItems = await getLocationListItems({ userId });
+    return { locationListItems };
+  },
+  component: LocationsPage,
+});
 
-export default function LocationsPage() {
-  const data = useLoaderData<typeof loader>();
+function LocationsPage() {
+  const { locationListItems } = Route.useLoaderData();
+  const navigate = useNavigate();
+
+  const handleDelete = async (locationId: string) => {
+    await fetch(`/locations/${locationId}/delete`, {
+      method: "POST",
+    });
+    navigate({ to: "/locations" });
+  };
 
   return (
     <div className="flex h-full min-h-screen flex-col">
@@ -23,7 +37,7 @@ export default function LocationsPage() {
           Back to items
         </Link>
         <Link
-          to="new"
+          to="/locations/new"
           className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50"
         >
           + New Location
@@ -33,28 +47,26 @@ export default function LocationsPage() {
       <main className="flex flex-col h-full">
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           <ol className="grid gap-2.5 px-2 divide-y divide-gray-100">
-            {data.locationListItems.length > 0 ? (
-              data.locationListItems.map((location) => (
+            {locationListItems.length > 0 ? (
+              locationListItems.map((location) => (
                 <li
                   key={location.id}
                   className="px-2 py-4 flex justify-between items-center"
                 >
                   <p className="text-lg font-bold">{location.title}</p>
-                  <Form
-                    method="post"
-                    action={`/locations/${location.id}/delete`}
+                  <button
+                    onClick={() => handleDelete(location.id)}
+                    className="text-sm btn bg-red-800!"
                   >
-                    <button type="submit" className="text-sm btn bg-red-800!">
-                      Delete
-                    </button>
-                  </Form>
+                    Delete
+                  </button>
                 </li>
               ))
             ) : (
               <li>
                 No locations yet.
                 <Link
-                  to="new"
+                  to="/locations/new"
                   className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50 mt-6"
                   id="new"
                 >

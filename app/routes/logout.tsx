@@ -1,9 +1,11 @@
-import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
-
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { logout } from "~/session.server";
 
-export const action = async ({ request }: ActionFunctionArgs) =>
-  logout(request);
-
-export const loader = async () => redirect("/");
+export const Route = createFileRoute("/logout")({
+  loader: async ({ context }) => {
+    await logout(context.request);
+    throw redirect({
+      to: "/",
+    });
+  },
+});

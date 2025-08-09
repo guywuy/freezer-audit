@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { Link } from "@tanstack/react-router";
 
 interface Props {
   style?: string;
@@ -7,7 +7,7 @@ interface Props {
 
 export default function BackToIndex({ style = "", backTo }: Props) {
   return (
-    <NavLink
+    <Link
       className={`bg-white p-2 border-2 border-fuchsia-600 rounded-md self-end justify-self-end ${style}`}
       to={backTo ? backTo : "/items"}
     >
@@ -19,6 +19,6 @@ export default function BackToIndex({ style = "", backTo }: Props) {
       >
         <path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414 4.242 4.242-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414-4.242-4.242 4.242-4.242z" />
       </svg>
-    </NavLink>
+    </Link>
   );
 }

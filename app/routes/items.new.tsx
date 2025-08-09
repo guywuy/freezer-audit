@@ -1,109 +1,46 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import {
-  data,
-  redirect,
-  Form,
-  useActionData,
-  useLoaderData,
-} from "react-router";
-
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import SubpageHeader from "~/components/subpageHeader";
-import { createItem } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
-import { commitSession, getSession, requireUserId } from "~/session.server";
+import { requireUserId } from "~/session.server";
 import { categoryNames } from "~/shared";
 import { nameToSlug } from "~/utils";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request);
-  const locationListItems = await getLocationListItems({ userId });
-  return { locationListItems };
-};
+export const Route = createFileRoute("/items/new")({
+  loader: async ({ context }) => {
+    const userId = await requireUserId(context.request);
+    const locationListItems = await getLocationListItems({ userId });
+    return { locationListItems };
+  },
+  component: NewItemPage,
+});
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const userId = await requireUserId(request);
+function NewItemPage() {
+  const { locationListItems } = Route.useLoaderData();
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState<any>({});
 
-  const formData = await request.formData();
-  const title = formData.get("title");
-  const amount = formData.get("amount");
-  const location = formData.get("location");
-  const category = formData.get("category");
-  const notes = formData.get("notes");
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const response = await fetch("/items/new/action", {
+      method: "POST",
+      body: formData,
+    });
 
-  const errors = {
-    title: null,
-    amount: null,
-    notes: null,
-    location: null,
-    category: null,
+    if (response.ok) {
+      const category = formData.get("category") as string;
+      navigate({ to: `/items#${nameToSlug(category)}` });
+    } else {
+      const data = await response.json();
+      setErrors(data.errors);
+    }
   };
 
-  if (typeof title !== "string" || title.length === 0) {
-    return data(
-      { errors: { ...errors, title: "Title is required" } },
-      { status: 400 },
-    );
-  }
-
-  if (typeof amount !== "string" || amount.length === 0) {
-    return data(
-      { errors: { ...errors, amount: "Amount is required" } },
-      { status: 400 },
-    );
-  }
-
-  if (typeof location !== "string" || location.length === 0) {
-    return data(
-      { errors: { ...errors, location: "Location is required" } },
-      { status: 400 },
-    );
-  }
-
-  if (typeof category !== "string" || category.length === 0) {
-    return data(
-      { errors: { ...errors, category: "Category is required" } },
-      { status: 400 },
-    );
-  }
-
-  if (typeof notes !== "string") {
-    return data(
-      { errors: { ...errors, notes: "Notes should be text" } },
-      { status: 400 },
-    );
-  }
-
-  await createItem({
-    userId,
-    title,
-    amount,
-    notes,
-    location,
-    category,
-    needsMore: false,
-  });
-
-  const session = await getSession(request.headers.get("Cookie"));
-
-  session.flash("globalMessage", {
-    type: "SUCCESS",
-    message: `${title} added!`,
-  });
-
-  return redirect(`/items#${nameToSlug(category)}`, {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
-};
-
-export default function NewItemPage() {
-  const data = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
-
   return (
-    <Form
+    <form
       method="post"
+      onSubmit={handleSubmit}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -116,21 +53,17 @@ export default function NewItemPage() {
         <label className="flex w-full flex-col gap-1">
           <span>Title: </span>
           <input
-            // ref={titleRef}
             name="title"
             required
             className="flex-1 rounded-sm"
-            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
-            aria-invalid={actionData?.errors?.title ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.title ? "title-error" : undefined
-            }
+            aria-invalid={errors?.title ? true : undefined}
+            aria-errormessage={errors?.title ? "title-error" : undefined}
           />
         </label>
-        {actionData?.errors?.title ? (
+        {errors?.title ? (
           <div className="pt-1 text-red-700" id="title-error">
-            {actionData.errors.title}
+            {errors.title}
           </div>
         ) : null}
       </div>
@@ -138,19 +71,16 @@ export default function NewItemPage() {
         <label className="flex w-full flex-col gap-1">
           <span>Amount: </span>
           <input
-            // ref={amountRef}
             name="amount"
             required
             className="flex-1 rounded-sm"
-            aria-invalid={actionData?.errors?.amount ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.amount ? "amount-error" : undefined
-            }
+            aria-invalid={errors?.amount ? true : undefined}
+            aria-errormessage={errors?.amount ? "amount-error" : undefined}
           />
         </label>
-        {actionData?.errors?.amount ? (
+        {errors?.amount ? (
           <div className="pt-1 text-red-700" id="amount-error">
-            {actionData.errors.amount}
+            {errors.amount}
           </div>
         ) : null}
       </div>
@@ -160,9 +90,9 @@ export default function NewItemPage() {
           <select
             name="category"
             className="flex-1 rounded-sm"
-            aria-invalid={actionData?.errors?.category ? true : undefined}
+            aria-invalid={errors?.category ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.category ? "category-error" : undefined
+              errors?.category ? "category-error" : undefined
             }
           >
             {categoryNames.map((c) => (
@@ -170,9 +100,9 @@ export default function NewItemPage() {
             ))}
           </select>
         </label>
-        {actionData?.errors?.category ? (
+        {errors?.category ? (
           <div className="pt-1 text-red-700" id="category-error">
-            {actionData.errors.category}
+            {errors.category}
           </div>
         ) : null}
       </div>
@@ -181,9 +111,9 @@ export default function NewItemPage() {
           <span>Notes: </span>
           <input name="notes" defaultValue={""} className="flex-1 rounded-sm" />
         </label>
-        {actionData?.errors?.notes ? (
+        {errors?.notes ? (
           <div className="pt-1 text-red-700" id="notes-error">
-            {actionData.errors.notes}
+            {errors.notes}
           </div>
         ) : null}
       </div>
@@ -194,13 +124,13 @@ export default function NewItemPage() {
             name="location"
             required
             className="flex-1 rounded-sm"
-            aria-invalid={actionData?.errors?.location ? true : undefined}
+            aria-invalid={errors?.location ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.location ? "location-error" : undefined
+              errors?.location ? "location-error" : undefined
             }
           >
-            {data.locationListItems.length > 0 ? (
-              data.locationListItems.map((loc) => (
+            {locationListItems.length > 0 ? (
+              locationListItems.map((loc) => (
                 <option key={loc.title} value={loc.title} label={loc.title} />
               ))
             ) : (
@@ -218,6 +148,6 @@ export default function NewItemPage() {
           Save
         </button>
       </div>
-    </Form>
+    </form>
   );
 }

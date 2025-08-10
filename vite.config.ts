@@ -10,4 +10,7 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss(),
   ],
+  define: {
+    "process.env": {},
+  },
 });

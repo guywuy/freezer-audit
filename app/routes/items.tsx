@@ -135,15 +135,15 @@ export default function ItemsPage() {
   };
 
   return (
-    <div className="flex h-full min-h-screen flex-col">
-      <header className="flex items-center justify-between p-4 pl-2">
+    <div className="flex min-h-screen flex-col">
+      <header className="flex items-center justify-between p-2 sticky top-0 z-10">
         <details>
           <summary
-            className="text-black p-2 font-bold relative list-none [&::-webkit-details-marker]:hidden flex items-center gap-1"
+            className="text-gray-700 p-2 font-bold relative list-none [&::-webkit-details-marker]:hidden flex items-center gap-1 border-2 border-current bg-gray-50 rounded-sm"
             data-menu
           >
             <svg height="32px" viewBox="0 0 32 32" width="32px">
-              <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
+              <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" fill="currentColor" />
             </svg>
             <span className="sr-only">Menu</span>
           </summary>
@@ -178,7 +178,7 @@ export default function ItemsPage() {
         </Link>
       </header>
 
-      <main className="flex flex-col h-full">
+      <main className="flex flex-col">
         <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
           {outOfStock.length > 0 ? (
             <details className="w-full border-red-700 border-2 bg-red-50 mb-4">
@@ -391,7 +391,7 @@ export default function ItemsPage() {
         </div>
 
         <div
-          className={`max-h-screen fixed min-h-[60vh] h-auto bottom-0 left-0 w-full border-t-4 border-l-4 empty:translate-y-full translate-y-0 transition-transform flex-1 p-6 rounded-tl-xl overflow-auto shadow-top empty:shadow-none bg-fuchsia-50 border-fuchsia-600 bg-noise`}
+          className={`z-10 max-h-screen fixed min-h-[60vh] h-auto bottom-0 left-0 w-full border-t-4 border-l-4 empty:translate-y-full translate-y-0 transition-transform flex-1 p-6 rounded-tl-xl overflow-auto shadow-top empty:shadow-none bg-fuchsia-50 border-fuchsia-600 bg-noise`}
         >
           <Outlet />
         </div>

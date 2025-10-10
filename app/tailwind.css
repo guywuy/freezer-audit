@@ -40,6 +40,10 @@ details[open] summary ~ * {
   animation: spoiler 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+header:has(details[open]) {
+  @apply bg-white;
+}
+
 @keyframes spoiler {
   0% {
     transform: scaleY(0);

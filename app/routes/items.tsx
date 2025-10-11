@@ -136,7 +136,7 @@ export default function ItemsPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="flex items-center justify-between p-2 sticky top-0 z-10">
+      <header className="flex items-center justify-between p-2">
         <details>
           <summary
             className="text-gray-700 p-2 font-bold relative list-none [&::-webkit-details-marker]:hidden flex items-center gap-1 border-2 border-current bg-gray-50 rounded-sm"
@@ -172,14 +172,14 @@ export default function ItemsPage() {
 
         <Link
           to="new"
-          className="rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block p-4 text-xl bg-linear-to-bl from-green-100 to-green-50"
+          className="fixed z-10 top-2.5 right-2 rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block text-lg bg-linear-to-bl from-green-100 to-green-50"
         >
           + New Item
         </Link>
       </header>
 
       <main className="flex flex-col">
-        <div className="flex-1 basis-1/5 flex flex-col overflow-auto">
+        <div className="flex-1 basis-1/5 flex flex-col">
           {outOfStock.length > 0 ? (
             <details className="w-full border-red-700 border-2 bg-red-50 mb-4">
               <summary className="p-2 py-4 list-none [&::-webkit-details-marker]:hidden flex items-center gap-1">
@@ -273,8 +273,7 @@ export default function ItemsPage() {
             </div>
           ) : null}
 
-          {usedCategoriesInOrder.length > 0 && (
-            <ol className="flex flex-wrap items-center gap-2.5 px-2">
+          {usedCategoriesInOrder.length > 0 ? <ol className="flex flex-wrap items-center gap-2.5 px-2">
               <p className="text-xs text-gray-600">Jump to category:</p>
               {usedCategoriesInOrder.map((category) => (
                 <Link
@@ -285,8 +284,7 @@ export default function ItemsPage() {
                   {category.name} &nbsp;{category.emoji}
                 </Link>
               ))}
-            </ol>
-          )}
+            </ol> : null}
 
           {backupRecommended ? (
             <section className="mt-3 p-2">

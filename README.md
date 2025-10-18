@@ -48,6 +48,8 @@ Every commit to `main` will trigger a deployment to the production environment, 
 
 The sqlite database lives at `/data/sqlite.db` in your deployed application. You can connect to the live database by running `fly ssh console -C database-cli`.
 
+You can copy the database to a local directory by running `fly ssh sftp get -a freezer-audit /data/sqlite.db sqlite.db`
+
 ## Testing
 
 ### Cypress

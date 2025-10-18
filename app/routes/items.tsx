@@ -143,7 +143,10 @@ export default function ItemsPage() {
             data-menu
           >
             <svg height="32px" viewBox="0 0 32 32" width="32px">
-              <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" fill="currentColor" />
+              <path
+                d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"
+                fill="currentColor"
+              />
             </svg>
             <span className="sr-only">Menu</span>
           </summary>
@@ -234,6 +237,25 @@ export default function ItemsPage() {
             />
           </div>
 
+          {searchFilter?.length ? (
+            <div className="px-2">
+              <button
+                onClick={() => setSearchFilter(null)}
+                className="p-1 px-2 border-2 border-current mb-4 w-full flex items-center justify-center tracking-wider"
+              >
+                Clear search
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5" />
+                </svg>
+              </button>
+            </div>
+          ) : null}
+
           {locationFilterObjects.length > 1 ? (
             <div className="flex flex-wrap items-center gap-2.5 text-sm my-2 px-2 mb-4">
               <p className="text-xs text-gray-600">Filter by freezer:</p>
@@ -273,7 +295,8 @@ export default function ItemsPage() {
             </div>
           ) : null}
 
-          {usedCategoriesInOrder.length > 0 ? <ol className="flex flex-wrap items-center gap-2.5 px-2">
+          {usedCategoriesInOrder.length > 0 ? (
+            <ol className="flex flex-wrap items-center gap-2.5 px-2">
               <p className="text-xs text-gray-600">Jump to category:</p>
               {usedCategoriesInOrder.map((category) => (
                 <Link
@@ -284,7 +307,8 @@ export default function ItemsPage() {
                   {category.name} &nbsp;{category.emoji}
                 </Link>
               ))}
-            </ol> : null}
+            </ol>
+          ) : null}
 
           {backupRecommended ? (
             <section className="mt-3 p-2">

@@ -412,11 +412,7 @@ export default function ItemsPage() {
           )}
         </div>
 
-        <div
-          className={`z-10 max-h-screen fixed min-h-[60vh] h-auto bottom-0 left-0 w-full border-t-4 border-l-4 empty:translate-y-full translate-y-0 transition-transform flex-1 p-6 rounded-tl-xl overflow-auto shadow-top empty:shadow-none bg-fuchsia-50 border-fuchsia-600 bg-noise`}
-        >
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
     </div>
   );

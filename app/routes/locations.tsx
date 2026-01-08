@@ -40,14 +40,17 @@ export default function LocationsPage() {
                   className="px-2 py-4 flex justify-between items-center"
                 >
                   <p className="text-lg font-bold">{location.title}</p>
-                  <Form
-                    method="post"
-                    action={`/locations/${location.id}/delete`}
-                  >
-                    <button type="submit" className="text-sm btn bg-red-800!">
-                      Delete
-                    </button>
-                  </Form>
+                  <details>
+                    <summary className="font-bold">Delete</summary>
+                    <Form
+                      method="post"
+                      action={`/locations/${location.id}/delete`}
+                    >
+                      <button type="submit" className="text-sm btn bg-red-800!">
+                        Are you sure?
+                      </button>
+                    </Form>
+                  </details>
                 </li>
               ))
             ) : (

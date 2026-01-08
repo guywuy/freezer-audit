@@ -1,4 +1,4 @@
-import BackToIndex from "./backToIndex";
+import BackToIndex from "./BackToIndex";
 
 interface Props {
   style?: string;

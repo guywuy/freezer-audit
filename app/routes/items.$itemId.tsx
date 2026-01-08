@@ -2,16 +2,17 @@ import { useState } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   data,
-  redirect,
   Form,
   isRouteErrorResponse,
+  redirect,
   useActionData,
   useLoaderData,
   useRouteError,
 } from "react-router";
 import invariant from "tiny-invariant";
 
-import SubpageHeader from "~/components/subpageHeader";
+import ChildLayout from "~/components/ChildLayout";
+import SubpageHeader from "~/components/SubpageHeader";
 import { getItem, updateItem } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
 import { requireUserId } from "~/session.server";
@@ -102,6 +103,7 @@ export default function ItemDetailsPage() {
   const [showEdit, setShowEdit] = useState(false);
 
   return (
+        <ChildLayout>
     <div>
       <SubpageHeader title={item.title} />
       <hr className="mb-4" />
@@ -316,6 +318,8 @@ export default function ItemDetailsPage() {
         </div>
       ) : null}
     </div>
+        </ChildLayout>
+    
   );
 }
 

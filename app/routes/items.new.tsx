@@ -7,7 +7,8 @@ import {
   useLoaderData,
 } from "react-router";
 
-import SubpageHeader from "~/components/subpageHeader";
+import ChildLayout from "~/components/ChildLayout";
+import SubpageHeader from "~/components/SubpageHeader";
 import { createItem } from "~/models/item.server";
 import { getLocationListItems } from "~/models/location.server";
 import { commitSession, getSession, requireUserId } from "~/session.server";
@@ -102,122 +103,128 @@ export default function NewItemPage() {
   const actionData = useActionData<typeof action>();
 
   return (
-    <Form
-      method="post"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        width: "100%",
-      }}
-    >
-      <SubpageHeader title="Add an item" />
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Title: </span>
-          <input
-            // ref={titleRef}
-            name="title"
-            required
-            className="flex-1 rounded-sm"
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-            aria-invalid={actionData?.errors?.title ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.title ? "title-error" : undefined
-            }
-          />
-        </label>
-        {actionData?.errors?.title ? (
-          <div className="pt-1 text-red-700" id="title-error">
-            {actionData.errors.title}
-          </div>
-        ) : null}
-      </div>
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Amount: </span>
-          <input
-            // ref={amountRef}
-            name="amount"
-            required
-            className="flex-1 rounded-sm"
-            aria-invalid={actionData?.errors?.amount ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.amount ? "amount-error" : undefined
-            }
-          />
-        </label>
-        {actionData?.errors?.amount ? (
-          <div className="pt-1 text-red-700" id="amount-error">
-            {actionData.errors.amount}
-          </div>
-        ) : null}
-      </div>
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Category: </span>
-          <select
-            name="category"
-            className="flex-1 rounded-sm"
-            aria-invalid={actionData?.errors?.category ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.category ? "category-error" : undefined
-            }
-          >
-            {categoryNames.map((c) => (
-              <option value={c} label={c} key={c} />
-            ))}
-          </select>
-        </label>
-        {actionData?.errors?.category ? (
-          <div className="pt-1 text-red-700" id="category-error">
-            {actionData.errors.category}
-          </div>
-        ) : null}
-      </div>
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Notes: </span>
-          <input name="notes" defaultValue={""} className="flex-1 rounded-sm" />
-        </label>
-        {actionData?.errors?.notes ? (
-          <div className="pt-1 text-red-700" id="notes-error">
-            {actionData.errors.notes}
-          </div>
-        ) : null}
-      </div>
-      <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Location: </span>
-          <select
-            name="location"
-            required
-            className="flex-1 rounded-sm"
-            aria-invalid={actionData?.errors?.location ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.location ? "location-error" : undefined
-            }
-          >
-            {data.locationListItems.length > 0 ? (
-              data.locationListItems.map((loc) => (
-                <option key={loc.title} value={loc.title} label={loc.title} />
-              ))
-            ) : (
-              <>
-                <option value="Kitchen" label="Kitchen" />
-                <option value="Cellar" label="Cellar" />
-              </>
-            )}
-          </select>
-        </label>
-      </div>
+    <ChildLayout>
+      <Form
+        method="post"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          width: "100%",
+        }}
+      >
+        <SubpageHeader title="Add an item" />
+        <div>
+          <label className="flex w-full flex-col gap-1">
+            <span>Title: </span>
+            <input
+              // ref={titleRef}
+              name="title"
+              required
+              className="flex-1 rounded-sm"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+              aria-invalid={actionData?.errors?.title ? true : undefined}
+              aria-errormessage={
+                actionData?.errors?.title ? "title-error" : undefined
+              }
+            />
+          </label>
+          {actionData?.errors?.title ? (
+            <div className="pt-1 text-red-700" id="title-error">
+              {actionData.errors.title}
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <label className="flex w-full flex-col gap-1">
+            <span>Amount: </span>
+            <input
+              // ref={amountRef}
+              name="amount"
+              required
+              className="flex-1 rounded-sm"
+              aria-invalid={actionData?.errors?.amount ? true : undefined}
+              aria-errormessage={
+                actionData?.errors?.amount ? "amount-error" : undefined
+              }
+            />
+          </label>
+          {actionData?.errors?.amount ? (
+            <div className="pt-1 text-red-700" id="amount-error">
+              {actionData.errors.amount}
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <label className="flex w-full flex-col gap-1">
+            <span>Category: </span>
+            <select
+              name="category"
+              className="flex-1 rounded-sm"
+              aria-invalid={actionData?.errors?.category ? true : undefined}
+              aria-errormessage={
+                actionData?.errors?.category ? "category-error" : undefined
+              }
+            >
+              {categoryNames.map((c) => (
+                <option value={c} label={c} key={c} />
+              ))}
+            </select>
+          </label>
+          {actionData?.errors?.category ? (
+            <div className="pt-1 text-red-700" id="category-error">
+              {actionData.errors.category}
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <label className="flex w-full flex-col gap-1">
+            <span>Notes: </span>
+            <input
+              name="notes"
+              defaultValue={""}
+              className="flex-1 rounded-sm"
+            />
+          </label>
+          {actionData?.errors?.notes ? (
+            <div className="pt-1 text-red-700" id="notes-error">
+              {actionData.errors.notes}
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <label className="flex w-full flex-col gap-1">
+            <span>Location: </span>
+            <select
+              name="location"
+              required
+              className="flex-1 rounded-sm"
+              aria-invalid={actionData?.errors?.location ? true : undefined}
+              aria-errormessage={
+                actionData?.errors?.location ? "location-error" : undefined
+              }
+            >
+              {data.locationListItems.length > 0 ? (
+                data.locationListItems.map((loc) => (
+                  <option key={loc.title} value={loc.title} label={loc.title} />
+                ))
+              ) : (
+                <>
+                  <option value="Kitchen" label="Kitchen" />
+                  <option value="Cellar" label="Cellar" />
+                </>
+              )}
+            </select>
+          </label>
+        </div>
 
-      <div className="text-right mt-8">
-        <button type="submit" className="btn">
-          Save
-        </button>
-      </div>
-    </Form>
+        <div className="text-right mt-8">
+          <button type="submit" className="btn">
+            Save
+          </button>
+        </div>
+      </Form>
+    </ChildLayout>
   );
 }

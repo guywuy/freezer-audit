@@ -6,7 +6,6 @@ import { data ,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
   useLoaderData,
 } from "react-router";
 
@@ -77,7 +76,6 @@ export default function App() {
       <body className="min-h-full max-w-4xl mx-auto bg-gray-50 scroll-pt-20 scroll-mt-20 scroll-smooth">
         <Toaster />
         <Outlet />
-        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

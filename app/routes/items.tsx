@@ -265,7 +265,7 @@ export default function ItemsPage() {
                     onClick={() => setLocFilter(null)}
                     className={`p-1 px-2 border-2 ${
                       !locFilter
-                        ? "border-green-700 outline outline-2 outline-green-700"
+                        ? "border-green-700 outline-2 outline-green-700"
                         : "border-gray-400"
                     }`}
                   >
@@ -282,7 +282,7 @@ export default function ItemsPage() {
                       }
                       className={`p-1 px-2 border-2 ${
                         locFilter === location.title
-                          ? "border-green-700 outline outline-2 outline-green-400"
+                          ? "border-green-700 outline-2 outline-green-400"
                           : "border-gray-400"
                       }`}
                     >

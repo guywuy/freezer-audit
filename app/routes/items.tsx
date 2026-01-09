@@ -1,6 +1,6 @@
 import { Item } from "@prisma/client";
 import Fuse from "fuse.js";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
 
@@ -26,8 +26,9 @@ export default function ItemsPage() {
   const [searchFilter, setSearchFilter] = useState<string | null>(null);
   const [backupRecommended, setBackupRecommended] = useState<boolean>(false);
 
-  const setLastExportedToNow = () =>
+  const setLastExportedToNow = useCallback(() => {
     window.localStorage.setItem("lastExport", `${new Date().toISOString()}`);
+  }, []);
 
   useEffect(() => {
     // Check localStorage for 'lastExport'
@@ -35,22 +36,22 @@ export default function ItemsPage() {
     // If doesn't exist, set it to today
     if (!lastExport) {
       setLastExportedToNow();
+      return;
     }
     // If it does exist, check the date and the difference between today
-    if (lastExport) {
-      const then = new Date(lastExport).getTime();
-      const now = new Date().getTime();
+    const then = new Date(lastExport).getTime();
+    const now = new Date().getTime();
 
-      const diff = Math.abs(now - then);
-      const millisecondsInDay = 1000 * 60 * 60 * 24;
-      const diffInDays = diff / millisecondsInDay;
+    const diff = Math.abs(now - then);
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const diffInDays = diff / millisecondsInDay;
 
-      // If diff is > 30 days, show Backup banner
-      if (diffInDays > 30) {
-        setBackupRecommended(true);
-      }
+    // If diff is > 30 days, show Backup banner
+    if (diffInDays > 30) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBackupRecommended(true);
     }
-  }, []);
+  }, [setLastExportedToNow]);
 
   const outOfStock = data.itemListItems.filter((item) => item.needsMore);
   const inStock = data.itemListItems.filter((item) => !item.needsMore);

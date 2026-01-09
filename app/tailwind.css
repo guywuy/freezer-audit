@@ -44,6 +44,10 @@ header:has(details[open]) {
   @apply bg-white;
 }
 
+.item-list li {
+  scroll-margin-top: 70px;
+}
+
 @keyframes spoiler {
   0% {
     transform: scaleY(0);

@@ -177,6 +177,7 @@ export default function ItemsPage() {
         <Link
           to="new"
           className="fixed z-10 top-2.5 right-2 rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block text-lg bg-linear-to-bl from-green-100 to-green-50"
+          preventScrollReset
         >
           + New Item
         </Link>
@@ -304,6 +305,7 @@ export default function ItemsPage() {
                   key={category.name}
                   to={`#${nameToSlug(category.name)}`}
                   className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
+                  preventScrollReset
                 >
                   {category.name} &nbsp;{category.emoji}
                 </Link>
@@ -370,7 +372,7 @@ export default function ItemsPage() {
                     <p className="text-2xl">{category.emoji}</p>
                   </header>
                   <ol
-                    className={`mb-2 divide-y divide-fuchsia-200 border-l-4 ${
+                    className={`item-list mb-2 divide-y divide-fuchsia-200 border-l-4 ${
                       category.borderColourClass || "border-teal-400"
                     }`}
                   >
@@ -387,6 +389,7 @@ export default function ItemsPage() {
                             }`
                           }
                           to={item.id!}
+                          preventScrollReset
                         >
                           {item.title}
                           <ul className="mt-1.5 grid grid-cols-2 gap-2 text-xs text-gray-900 font-bold">

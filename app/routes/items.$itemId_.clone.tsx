@@ -10,7 +10,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   invariant(params.itemId, "itemId not found");
 
-  await cloneItem({ id: params.itemId, userId });
+  const newItem = await cloneItem({ id: params.itemId, userId });
 
   const session = await getSession(request.headers.get("Cookie"));
 
@@ -19,7 +19,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     message: `Cloned!`,
   });
 
-  return redirect(`/items`, {
+  return redirect(`/items#${newItem?.id}`, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },

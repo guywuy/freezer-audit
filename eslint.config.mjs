@@ -1,18 +1,15 @@
 import js from "@eslint/js";
 import globals from "globals";
-import { fixupPluginRules } from "@eslint/compat";
 
 import reactPlugin from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import jestPlugin from "eslint-plugin-jest";
 import jestDom from "eslint-plugin-jest-dom";
 import testingLibrary from "eslint-plugin-testing-library";
 import cypress from "eslint-plugin-cypress/flat";
-import markdown from "eslint-plugin-markdown";
 import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
-
-import reactHooks from "eslint-plugin-react-hooks";
 
 export default [
   // 1. Global Ignores
@@ -63,17 +60,14 @@ export default [
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
-      "react-hooks": fixupPluginRules(reactHooks),
+      "react-hooks": reactHooks,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
     },
   },
 
-  // 6. Markdown
-  ...markdown.configs.recommended,
-
-  // 7. Testing (Jest/RTL)
+  // 6. Testing (Jest/RTL)
   {
     files: ["**/*.test.{js,jsx,ts,tsx}"],
     ...jestPlugin.configs["flat/recommended"],
@@ -85,13 +79,13 @@ export default [
     },
   },
 
-  // 8. Cypress
+  // 7. Cypress
   {
     files: ["cypress/**/*.ts"],
     ...cypress.configs.recommended,
   },
 
-  // 9. Node Environment Overrides
+  // 8. Node Environment Overrides
   {
     files: ["mocks/**/*.js", "mocks/**/*.ts", "prisma/**/*.ts"],
     languageOptions: {
@@ -101,6 +95,6 @@ export default [
     },
   },
 
-  // 10. Prettier (Always last)
+  // 9. Prettier
   eslintConfigPrettier,
 ];

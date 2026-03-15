@@ -11,6 +11,7 @@ export default function BackToIndex({ style = "", backTo }: Props) {
       className={`bg-white p-2 border-2 border-fuchsia-600 rounded-md self-end justify-self-end ${style}`}
       to={backTo ? backTo : "/items"}
       title="Back to list of items"
+      preventScrollReset
     >
       <svg
         height="24"

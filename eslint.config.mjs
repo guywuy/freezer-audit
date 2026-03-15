@@ -7,7 +7,7 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import jestPlugin from "eslint-plugin-jest";
 import jestDom from "eslint-plugin-jest-dom";
 import testingLibrary from "eslint-plugin-testing-library";
-import cypress from "eslint-plugin-cypress/flat";
+import cypress from "eslint-plugin-cypress";
 import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 
@@ -38,7 +38,7 @@ export default [
     ...reactPlugin.configs.flat.recommended,
     ...reactPlugin.configs.flat["jsx-runtime"],
     settings: {
-      react: { version: "detect" },
+      react: { version: "19.2" },
       formComponents: ["Form"],
       linkComponents: [
         { name: "Link", linkAttribute: "to" },
@@ -82,7 +82,21 @@ export default [
   // 7. Cypress
   {
     files: ["cypress/**/*.ts"],
-    ...cypress.configs.recommended,
+    plugins: {
+      cypress,
+    },
+    languageOptions: {
+      globals: {
+        cy: "readonly",
+        Cypress: "readonly",
+        expect: "readonly",
+        assert: "readonly",
+        chai: "readonly",
+      },
+    },
+    rules: {
+      ...cypress.configs.recommended.rules,
+    },
   },
 
   // 8. Node Environment Overrides

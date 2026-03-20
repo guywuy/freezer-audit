@@ -15,6 +15,13 @@ WORKDIR /myapp
 ADD package.json package-lock.json .npmrc ./
 RUN npm install --include=dev
 
+# Copy over the Prisma folder AND the config file
+ADD prisma ./prisma
+ADD prisma.config.ts ./
+
+# Generate the Prisma client (passing a dummy env var)
+RUN DATABASE_URL="file:./data.db" npx prisma generate
+
 # Setup production node_modules
 FROM base as production-deps
 
@@ -31,7 +38,7 @@ WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
 
-ADD prisma .
+ADD prisma ./prisma
 RUN npx prisma generate
 
 ADD . .
@@ -50,7 +57,7 @@ RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-c
 WORKDIR /myapp
 
 COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
+COPY --from=build /myapp/generated/prisma /myapp/generated/prisma
 
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public

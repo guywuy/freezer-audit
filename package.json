@@ -6,14 +6,14 @@
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
-    "dev:serve": "NODE_OPTIONS=\"--import ./mocks/index.js\" react-router-serve ./build/server/index.js",
+    "dev:serve": "cross-env NODE_OPTIONS=\"--import ./mocks/index.js\" react-router-serve ./build/server/index.js",
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "setup": "prisma generate && prisma migrate deploy && prisma db seed",
     "start": "react-router-serve ./build/server/index.js",
-    "start:mocks": "NODE_OPTIONS=\"--import ./mocks/index.js\" react-router-serve ./build/server/index.js",
+    "start:mocks": "cross-env NODE_OPTIONS=\"--import ./mocks/index.js\" react-router-serve ./build/server/index.js",
     "test": "vitest",
-    "test:e2e:dev": "start-server-and-test dev http://localhost:3000 \"npx cypress open\"",
+    "test:e2e:dev": "cross-env start-server-and-test dev http://localhost:3000 \"npx cypress open\"",
     "pretest:e2e:run": "npm run build",
     "test:e2e:run": "cross-env PORT=8811 start-server-and-test start:mocks http://localhost:8811 \"npx cypress run\"",
     "typecheck": "react-router typegen && tsc",
@@ -27,12 +27,14 @@
     "/.react-router/"
   ],
   "dependencies": {
-    "@prisma/client": "^6.12.0",
+    "@prisma/adapter-better-sqlite3": "^7.5.0",
+    "@prisma/client": "^7.5.0",
     "@react-router/fs-routes": "^7.13.1",
     "@react-router/node": "^7.13.1",
     "@react-router/serve": "^7.13.1",
     "@tailwindcss/vite": "^4.2.2",
     "bcryptjs": "^3.0.3",
+    "dotenv": "^17.3.1",
     "fuse.js": "^7.1.0",
     "isbot": "^5.1.36",
     "react": "^19.2.4",
@@ -48,6 +50,7 @@
     "@tailwindcss/forms": "^0.5.11",
     "@testing-library/cypress": "^10.1.0",
     "@testing-library/jest-dom": "^6.9.1",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/eslint": "^9.6.1",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
@@ -74,7 +77,7 @@
     "postcss": "^8.5.8",
     "prettier": "3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "prisma": "^6.12.0",
+    "prisma": "^7.5.0",
     "start-server-and-test": "^2.1.5",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
@@ -85,8 +88,5 @@
   },
   "engines": {
     "node": "24.14"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   }
 }

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useMatches } from "react-router";
 
-import type { User } from "~/models/user.server";
+import type { User } from "~prisma/client";
 
 const DEFAULT_REDIRECT = "/";
 

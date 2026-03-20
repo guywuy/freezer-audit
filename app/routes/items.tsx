@@ -1,4 +1,4 @@
-import { Item } from "@prisma/client";
+import { Item } from "~prisma/client";
 import Fuse from "fuse.js";
 import { useCallback, useEffect, useState } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";

@@ -5,7 +5,7 @@ import {
 } from "react-router";
 import invariant from "tiny-invariant";
 
-import type { User } from "~/models/user.server";
+import type { User } from "~prisma/client";
 import { getUserById } from "~/models/user.server";
 
 import { MessageVariant } from "./types";

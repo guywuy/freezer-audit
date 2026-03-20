@@ -3,8 +3,7 @@
 // npx ts-node -r tsconfig-paths/register ./cypress/support/delete-user.ts testlorem,
 // and that user will get deleted
 
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../../app/db.server";
 
 async function deleteUser(username: string) {
@@ -16,7 +15,7 @@ async function deleteUser(username: string) {
     await prisma.user.delete({ where: { username } });
   } catch (error) {
     if (
-      error instanceof PrismaClientKnownRequestError &&
+      error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2025"
     ) {
       console.log("User not found, so no need to delete");

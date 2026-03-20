@@ -17,11 +17,12 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "~prisma/*": ["./generated/prisma/*"],
     },
     "skipLibCheck": true,
 
     // react-router takes care of building everything in `react-router build`.
-    "noEmit": true
-  }
+    "noEmit": true,
+  },
 }

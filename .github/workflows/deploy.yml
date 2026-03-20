@@ -55,6 +55,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: "file:./data.db"
 
       - name: 🔎 Type check
         run: npm run typecheck --if-present

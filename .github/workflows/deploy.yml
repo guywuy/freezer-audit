@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 20
+          node-version: 24.14
 
       - name: 📥 Install deps
         run: npm install
@@ -41,14 +41,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 20
+          node-version: 24.14
 
       - name: 📥 Install deps
         run: npm install
@@ -61,14 +61,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 20
+          node-version: 24.14
 
       - name: 📥 Install deps
         run: npm install
@@ -81,13 +81,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🏄 Copy test env vars
         run: cp .env.example .env
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: npm
           cache-dependency-path: ./package.json
@@ -97,7 +97,7 @@ jobs:
         run: npm install
 
       - name: 🛠 Setup Database
-        run: npx prisma migrate reset --force
+        run: npx prisma migrate reset --force && npx prisma generate
         env:
           PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING: 1
 

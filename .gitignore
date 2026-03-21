@@ -10,3 +10,4 @@ node_modules
 /prisma/data.db
 /prisma/data.db-journal
 /generated/prisma/*
+.DS_Store

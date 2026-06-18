@@ -24,6 +24,7 @@ export const { getSession, commitSession, destroySession } =
     // a Cookie from `createCookie` or the CookieOptions to create one
     cookie: {
       name: "__session",
+      maxAge: 60 * 60 * 24 * 30,
       httpOnly: true,
       path: "/",
       sameSite: "lax",

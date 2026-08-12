@@ -4,8 +4,14 @@ FROM node:26.7-bullseye-slim as base
 # set for base and all layer that inherit from it
 ENV NODE_ENV production
 
-# Install openssl for Prisma
-RUN apt-get update && apt-get install -y openssl sqlite3
+# Install openssl for Prisma, sqlite3, and build tools for native modules (better-sqlite3)
+RUN apt-get update && apt-get install -y \
+    openssl \
+    sqlite3 \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install all node_modules, including dev dependencies
 FROM base as deps

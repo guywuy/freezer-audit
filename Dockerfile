@@ -1,10 +1,9 @@
-# base node image
-FROM node:26.7-bullseye-slim as base
+FROM node:26.7-bookworm-slim as base
 
 # set for base and all layer that inherit from it
 ENV NODE_ENV production
 
-# Install openssl for Prisma, sqlite3, and build tools for native modules (better-sqlite3)
+# Install openssl for Prisma, sqlite3, and build tools
 RUN apt-get update && apt-get install -y \
     openssl \
     sqlite3 \

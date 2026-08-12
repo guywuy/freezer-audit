@@ -128,24 +128,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6
 
-      - name: 👀 Read app name
-        uses: SebRollen/toml-action@v1.2.0
-        id: app_name
-        with:
-          file: fly.toml
-          field: app
-
       - name: 🎈 Setup Fly
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: 🚀 Deploy Staging
         if: ${{ github.ref == 'refs/heads/dev' }}
-        run: flyctl deploy --remote-only --build-arg COMMIT_SHA=${{ github.sha }} --app ${{ steps.app_name.outputs.value }}-staging
+        run: flyctl deploy --remote-only --build-arg COMMIT_SHA=${{ github.sha }} --app freezer-audit-staging
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       - name: 🚀 Deploy Production
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: flyctl deploy --remote-only --build-arg COMMIT_SHA=${{ github.sha }} --app ${{ steps.app_name.outputs.value }}
+        run: flyctl deploy --remote-only --build-arg COMMIT_SHA=${{ github.sha }} --app freezer-audit
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

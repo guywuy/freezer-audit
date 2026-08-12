@@ -120,6 +120,7 @@ export default function NewItemPage() {
             <input
               // ref={titleRef}
               name="title"
+              type="text"
               required
               className="flex-1 rounded-sm"
               // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -142,13 +143,19 @@ export default function NewItemPage() {
             <input
               // ref={amountRef}
               name="amount"
+              type="text"
               required
               className="flex-1 rounded-sm"
               aria-invalid={actionData?.errors?.amount ? true : undefined}
               aria-errormessage={
                 actionData?.errors?.amount ? "amount-error" : undefined
               }
+              list="amount-options"
             />
+            <datalist id="amount-options">
+              <option value="1 portion" />
+              <option value="2 portions" />
+            </datalist>
           </label>
           {actionData?.errors?.amount ? (
             <div className="pt-1 text-red-700" id="amount-error">
@@ -183,6 +190,7 @@ export default function NewItemPage() {
             <span>Notes: </span>
             <input
               name="notes"
+              type="text"
               defaultValue={""}
               className="flex-1 rounded-sm"
             />

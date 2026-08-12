@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   lint:
-    name: ⬣ ESLint
+    name: ⚡ Oxlint
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
@@ -110,7 +110,7 @@ jobs:
         run: npm run build
 
       - name: 🌳 Cypress run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           start: npm run start:mocks
           wait-on: http://localhost:8811
@@ -126,17 +126,17 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 👀 Read app name
-        uses: SebRollen/toml-action@v1.2.0
+        uses: SebRollen/toml-action@v1.3.0
         id: app_name
         with:
           file: fly.toml
           field: app
 
       - name: 🎈 Setup Fly
-        uses: superfly/flyctl-actions/setup-flyctl@1.5
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: 🚀 Deploy Staging
         if: ${{ github.ref == 'refs/heads/dev' }}

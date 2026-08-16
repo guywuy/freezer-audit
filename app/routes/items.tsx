@@ -25,6 +25,7 @@ export default function ItemsPage() {
   const [locFilter, setLocFilter] = useState<string | null>(null);
   const [searchFilter, setSearchFilter] = useState<string | null>(null);
   const [backupRecommended, setBackupRecommended] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const setLastExportedToNow = useCallback(() => {
     window.localStorage.setItem("lastExport", `${new Date().toISOString()}`);
@@ -175,7 +176,7 @@ export default function ItemsPage() {
         </details>
 
         <Link
-          to="new"
+          to={`new?category=${selectedCategory}`}
           className="fixed z-10 top-2.5 right-2 rounded-sm text-green-600 border-2 border-current font-bold px-4 py-2 block text-lg bg-linear-to-bl from-green-100 to-green-50"
           preventScrollReset
         >
@@ -305,6 +306,7 @@ export default function ItemsPage() {
                   key={category.name}
                   to={`#${nameToSlug(category.name)}`}
                   className={`text-xs p-2 px-3 rounded-full border bg-opacity-50 ${category.borderColourClass} ${category.bgColourClass}`}
+                  onClick={() => setSelectedCategory(category.name)}
                   preventScrollReset
                 >
                   {category.name} &nbsp;{category.emoji}

@@ -5,6 +5,7 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useSearchParams,
 } from "react-router";
 
 import ChildLayout from "~/components/ChildLayout";
@@ -101,6 +102,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function NewItemPage() {
   const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const [searchParams] = useSearchParams();
+  const defaultCategory = searchParams.get("category") || "";
 
   return (
     <ChildLayout>
@@ -169,6 +172,7 @@ export default function NewItemPage() {
             <select
               name="category"
               className="flex-1 rounded-sm"
+              defaultValue={defaultCategory || categoryNames[0]}
               aria-invalid={actionData?.errors?.category ? true : undefined}
               aria-errormessage={
                 actionData?.errors?.category ? "category-error" : undefined

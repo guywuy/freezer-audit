@@ -49,14 +49,12 @@ function login({
   username?: string;
 } = {}) {
   cy.then(() => ({ username })).as("user");
-  cy.exec(`npx tsx ./cypress/support/create-user.ts "${username}"`).then(
-    ({ stdout }) => {
-      const cookieValue = stdout
-        .replace(/.*<cookie>(?<cookieValue>.*)<\/cookie>.*/s, "$<cookieValue>")
-        .trim();
-      cy.setCookie("__session", cookieValue);
-    },
-  );
+  cy.task<string>("createUser", username).then((stdout) => {
+    const cookieValue = stdout
+      .replace(/.*<cookie>(?<cookieValue>.*)<\/cookie>.*/s, "$<cookieValue>")
+      .trim();
+    cy.setCookie("__session", cookieValue);
+  });
   return cy.get("@user");
 }
 
@@ -75,7 +73,7 @@ function cleanupUser({ username }: { username?: string } = {}) {
 }
 
 function deleteUserByUsername(username: string) {
-  cy.exec(`npx tsx ./cypress/support/delete-user.ts "${username}"`);
+  cy.task("deleteUser", username);
   cy.clearCookie("__session");
 }
 

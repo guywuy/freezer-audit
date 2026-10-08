@@ -1,4 +1,14 @@
+import { execFileSync } from "node:child_process";
+
 import { defineConfig } from "cypress";
+
+// Runs a cypress/support script with tsx in a child process and returns its stdout
+const runScript = (script: string, ...args: string[]) =>
+  execFileSync(
+    process.execPath,
+    ["--import", "tsx", `./cypress/support/${script}`, ...args],
+    { encoding: "utf8" },
+  );
 
 export default defineConfig({
   e2e: {
@@ -15,6 +25,12 @@ export default defineConfig({
       on("task", {
         log: (message) => {
           console.log(message);
+
+          return null;
+        },
+        createUser: (username: string) => runScript("create-user.ts", username),
+        deleteUser: (username: string) => {
+          runScript("delete-user.ts", username);
 
           return null;
         },

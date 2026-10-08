@@ -2,10 +2,13 @@ import { execFileSync } from "node:child_process";
 
 import { defineConfig } from "cypress";
 
-// Runs a cypress/support script with tsx in a child process and returns its stdout
+// Runs a cypress/support script with tsx in a child process and returns its stdout.
+// Uses `node` from PATH rather than process.execPath: Cypress may run this config
+// under a different Node (e.g. the GitHub Actions runner's), which can't load
+// native modules like better-sqlite3 built for the project's Node version.
 const runScript = (script: string, ...args: string[]) =>
   execFileSync(
-    process.execPath,
+    "node",
     ["--import", "tsx", `./cypress/support/${script}`, ...args],
     { encoding: "utf8" },
   );

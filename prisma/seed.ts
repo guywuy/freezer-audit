@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { PrismaClient } from "~prisma/client";
 import bcrypt from "bcryptjs";
 import path from "node:path";
@@ -10,7 +10,7 @@ const rawPath = connectionString.replace(/^file:/, "").split("?")[0];
 
 const absoluteDbPath = path.resolve(process.cwd(), rawPath);
 
-const adapter = new PrismaBetterSqlite3({ url: `file:${absoluteDbPath}` });
+const adapter = new PrismaLibSql({ url: `file:${absoluteDbPath}` });
 
 const prisma = new PrismaClient({ adapter });
 

@@ -10,18 +10,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-# 1. DEPS STAGE: Install build tools HERE ONLY to compile better-sqlite3
-# N.b we may not need these installing once better-sqlite3 publishes a node 26 compatible binary
+# 1. DEPS STAGE
 FROM base as deps
 
 WORKDIR /myapp
-
-# Install build tools temporarily
-RUN apt-get update && apt-get install -y \
-    python3 \
-    make \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
 
 ADD package.json package-lock.json .npmrc ./
 RUN npm install --include=dev
@@ -65,7 +57,7 @@ RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-c
 
 WORKDIR /myapp
 
-# Copy the COMPILED node_modules over from production-deps
+# Copy the pruned node_modules over from production-deps
 COPY --from=production-deps /myapp/node_modules /myapp/node_modules
 COPY --from=build /myapp/generated/prisma /myapp/generated/prisma
 COPY --from=build /myapp/build /myapp/build
@@ -73,5 +65,6 @@ COPY --from=build /myapp/public /myapp/public
 COPY --from=build /myapp/package.json /myapp/package.json
 COPY --from=build /myapp/start.sh /myapp/start.sh
 COPY --from=build /myapp/prisma /myapp/prisma
+COPY --from=build /myapp/prisma.config.ts /myapp/prisma.config.ts
 
 ENTRYPOINT [ "./start.sh" ]

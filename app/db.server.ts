@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { PrismaClient } from "~prisma/client";
 
 import { singleton } from "./singleton.server";
@@ -11,7 +11,7 @@ const rawPath = connectionString.replace(/^file:/, "").split("?")[0];
 
 const absoluteDbPath = path.resolve(process.cwd(), rawPath);
 
-const adapter = new PrismaBetterSqlite3({ url: `file:${absoluteDbPath}` });
+const adapter = new PrismaLibSql({ url: `file:${absoluteDbPath}` });
 
 const prisma = singleton("prisma", () => new PrismaClient({ adapter }));
 prisma.$connect();

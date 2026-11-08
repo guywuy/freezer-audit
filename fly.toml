@@ -8,6 +8,10 @@ auto_rollback = true
 cmd = "start.sh"
 entrypoint = "sh"
 
+[[vm]]
+size = "shared-cpu-1x"
+memory = "512mb"
+
 [mounts]
 source = "data"
 destination = "/data"

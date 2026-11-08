@@ -1,12 +1,9 @@
 app = "freezer-audit"
 primary_region = "lhr"
-swap_size_mb = 1024
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = [ ]
 
 [experimental]
-allowed_public_ports = [ ]
 auto_rollback = true
 cmd = "start.sh"
 entrypoint = "sh"
@@ -15,38 +12,24 @@ entrypoint = "sh"
 source = "data"
 destination = "/data"
 
-[[services]]
-internal_port = 8_080
+[http_service]
+internal_port = 8080
+force_https = true
 processes = [ "app" ]
-protocol = "tcp"
-script_checks = [ ]
+# Suspend the machine when idle and resume it on the next request.
+# Suspend needs no swap configured and <= 2 GB memory (the app peaks ~260 MB of 1 GB).
+auto_stop_machines = "suspend"
+auto_start_machines = true
+min_machines_running = 0
 
-  [services.concurrency]
+  [http_service.concurrency]
+  type = "connections"
   hard_limit = 25
   soft_limit = 20
-  type = "connections"
 
-  [[services.ports]]
-  handlers = [ "http" ]
-  port = 80
-  force_https = true
-
-  [[services.ports]]
-  handlers = [ "tls", "http" ]
-  port = 443
-
-  [[services.tcp_checks]]
-  grace_period = "1s"
-  interval = "15s"
-  restart_limit = 0
-  timeout = "2s"
-
-  [[services.http_checks]]
-  interval = "10s"
+  [[http_service.checks]]
   grace_period = "5s"
-  method = "get"
+  interval = "10s"
+  method = "GET"
   path = "/healthcheck"
-  protocol = "http"
   timeout = "2s"
-  tls_skip_verify = false
-  headers = { }
